@@ -1,12 +1,17 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "invora-frontend",
-  "compatibility_date": "2024-12-01",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-04-01",
   "compatibility_flags": ["nodejs_compat"],
-  "assets": { "directory": ".open-next/assets", "not_found_handling": "single-page-application" },
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
   "vars": {
     "NEXT_PUBLIC_SUPABASE_URL": "https://ydkjkchgvpehqkbofyas.supabase.co",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "NEXT_PUBLIC_APP_URL": "https://invora-frontend.pages.dev"
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlka2prY2hndnBlaHFrYm9meWFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNDcwMTIsImV4cCI6MjEwNTgyMzAxMn0.BBLHHjSF7wEAM9RyoHzHltDKooc7oz8JLdBvI5OplNw",
+    "NEXT_PUBLIC_APP_URL": "https://invora-frontend.pages.dev",
+    "NEXT_PUBLIC_APP_NAME": "Invora"
   }
 }
