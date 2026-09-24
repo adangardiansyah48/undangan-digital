@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "Bikin undangan digital sendiri, atau dibuatkan tim. Template elegan, custom nama tamu, RSVP, amplop digital.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id" className="h-full antialiased">
       <body className="min-h-full flex flex-col font-sans">{children}</body>

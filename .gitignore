@@ -44,7 +44,9 @@ frontend/.env
 *.tsbuildinfo
 next-env.d.ts
 
-# split
+# split + cloudflare
+.open-next/
+.wrangler/
 backend/dist/
 backend/node_modules/
 frontend/dist/
