@@ -255,15 +255,15 @@ create policy "gdrive_owner" on public.gdrive_tokens for all using (auth.uid() =
 insert into public.templates (slug, category, subcategory, title, description, thumbnail_url, is_premium, sort_order) values
   ('classic-ivory', 'wedding', null, 'Classic Ivory', 'Elegan klasik dengan palet ivory & gold', '/templates/classic-ivory.jpg', false, 1),
   ('modern-minimal', 'wedding', null, 'Modern Minimal', 'Desain bersih, tipografi modern', '/templates/modern-minimal.jpg', false, 2),
-  ('floral-blush', 'wedding', null, 'Floral Blush', 'Bunga blush pink romantis', true, 3),
-  ('adat-jawa', 'adat', 'jawa', 'Adat Jawa', 'Nuansa solo-jogja, batik & gunungan', true, 4),
-  ('adat-sunda', 'adat', 'sunda', 'Adat Sunda', 'Panggih sunda, warna hijau-kuning', true, 5),
-  ('adat-minang', 'adat', 'minang', 'Adat Minang', 'Motif songket & rumah gadang', true, 6),
-  ('adat-batak', 'adat', 'batak', 'Adat Batak', 'Ulos & gorga', true, 7),
-  ('adat-bali', 'adat', 'bali', 'Adat Bali', 'Pura, canang, emas-merah', true, 8),
-  ('adat-melayu', 'adat', 'melayu', 'Adat Melayu', 'Tepak sirih, songket kuning', true, 9),
-  ('animasi-1', 'animasi', null, 'Animasi Soft', 'Transisi lembut + particle', true, 10),
-  ('khitan-1', 'non-wedding', 'khitan', 'Khitanan Ceria', 'Tema anak, warna cerah', false, 11),
-  ('aqiqah-1', 'non-wedding', 'aqiqah', 'Aqiqah Soft', 'Tema bayi, pastel', false, 12),
-  ('birthday-1', 'non-wedding', 'birthday', 'Ultah Anak', 'Kartun & confetti', false, 13)
+  ('floral-blush', 'wedding', null, 'Floral Blush', 'Bunga blush pink romantis', '/templates/floral-blush.jpg', true, 3),
+  ('adat-jawa', 'adat', 'jawa', 'Adat Jawa', 'Nuansa solo-jogja, batik & gunungan', '/templates/adat-jawa.jpg', true, 4),
+  ('adat-sunda', 'adat', 'sunda', 'Adat Sunda', 'Panggih sunda, warna hijau-kuning', '/templates/adat-sunda.jpg', true, 5),
+  ('adat-minang', 'adat', 'minang', 'Adat Minang', 'Motif songket & rumah gadang', '/templates/adat-minang.jpg', true, 6),
+  ('adat-batak', 'adat', 'batak', 'Adat Batak', 'Ulos & gorga', '/templates/adat-batak.jpg', true, 7),
+  ('adat-bali', 'adat', 'bali', 'Adat Bali', 'Pura, canang, emas-merah', '/templates/adat-bali.jpg', true, 8),
+  ('adat-melayu', 'adat', 'melayu', 'Adat Melayu', 'Tepak sirih, songket kuning', '/templates/adat-melayu.jpg', true, 9),
+  ('animasi-1', 'animasi', null, 'Animasi Soft', 'Transisi lembut + particle', '/templates/animasi-1.jpg', true, 10),
+  ('khitan-1', 'non-wedding', 'khitan', 'Khitanan Ceria', 'Tema anak, warna cerah', '/templates/khitan-1.jpg', false, 11),
+  ('aqiqah-1', 'non-wedding', 'aqiqah', 'Aqiqah Soft', 'Tema bayi, pastel', '/templates/aqiqah-1.jpg', false, 12),
+  ('birthday-1', 'non-wedding', 'birthday', 'Ultah Anak', 'Kartun & confetti', '/templates/birthday-1.jpg', false, 13)
 on conflict (slug) do nothing;
