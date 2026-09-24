@@ -1,6 +1,6 @@
 import type { TemplateCategory, Tier } from "@/types/database";
 
-export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "Invora";
+export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "mstory.id";
 export const WA_NUMBER = process.env.NEXT_PUBLIC_WA_NUMBER ?? "6281234567890";
 
 export const TIERS: Record<
