@@ -155,6 +155,7 @@ export type GalleryItem = {
   invitation_id: string;
   type: "photo" | "video";
   url: string;
+  r2_key: string | null;
   drive_file_id: string | null;
   caption: string | null;
   sort_order: number;

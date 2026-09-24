@@ -34,6 +34,14 @@ export default async function PublicInvitationPage({
     .single();
 
   if (error || !invitation) return notFound();
+  if (invitation.expired_at && new Date(invitation.expired_at).getTime() <= Date.now()) {
+    return (
+      <main className="flex min-h-svh flex-col items-center justify-center gap-2 px-4">
+        <p className="text-sm font-medium">Undangan sudah berakhir.</p>
+        <p className="text-xs text-muted-foreground">Konten dan foto otomatis terhapus setelah masa aktif habis.</p>
+      </main>
+    );
+  }
   if (invitation.status !== "published") {
     return (
       <main className="flex min-h-svh items-center justify-center px-4">

@@ -103,11 +103,13 @@ create table if not exists public.gallery_items (
   invitation_id uuid not null references public.invitations(id) on delete cascade,
   type text not null check (type in ('photo','video')),
   url text not null,
+  r2_key text,
   drive_file_id text,
   caption text,
   sort_order integer not null default 0,
   created_at timestamptz not null default now()
 );
+create index if not exists idx_gallery_r2key on public.gallery_items(r2_key);
 
 create table if not exists public.analytics (
   id uuid primary key default gen_random_uuid(),

@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { slugify, waLink } from "@/lib/constants";
+import { expiryFromEvent } from "@/lib/expiry";
 import type { GalleryItem, Guest, Invitation } from "@/types/database";
 
 export function InvitationEditor({
@@ -39,13 +40,20 @@ export function InvitationEditor({
     setSaving(true);
     setMsg(null);
     const supabase = createClient();
+    let expiredAt = invitation.expired_at;
+    const nextStatus = invitation.status;
+    if (nextStatus === "published") {
+      const ev = (invitation.data.events ?? [])[0]?.date ?? null;
+      expiredAt = expiryFromEvent(ev, 10) ?? expiredAt;
+    }
     const { error } = await supabase
       .from("invitations")
       .update({
         title: invitation.title,
         slug: slugify(invitation.slug),
         data: invitation.data,
-        status: invitation.status,
+        status: nextStatus,
+        expired_at: expiredAt,
       })
       .eq("id", invitation.id);
     if (error) setMsg(error.message);
@@ -87,7 +95,7 @@ export function InvitationEditor({
         <TabsList className="flex w-full flex-wrap">
           <TabsTrigger value="mempelai">Mempelai</TabsTrigger>
           <TabsTrigger value="acara">Acara</TabsTrigger>
-          <TabsTrigger value="galeri">Galeri (GDrive)</TabsTrigger>
+          <TabsTrigger value="galeri">Galeri (R2)</TabsTrigger>
           <TabsTrigger value="tamu">Tamu</TabsTrigger>
           <TabsTrigger value="amplop">Amplop</TabsTrigger>
           <TabsTrigger value="pengaturan">Pengaturan</TabsTrigger>
@@ -457,7 +465,7 @@ function GalleryPanel({
       const body = await res.json();
       if (!res.ok) throw new Error(body.error ?? "Gagal upload");
       onChanged([body.item, ...items]);
-      setMsg("Upload berhasil (GDrive jika terhubung, fallback Supabase/local preview).");
+      setMsg(`Upload R2 OK (${body.mime ?? "image"} ${(body.compressed ? Math.round(body.compressed / 1024) + "KB" : "")})`.trim());
     } catch (err) {
       setMsg(err instanceof Error ? err.message : String(err));
     } finally {
@@ -469,7 +477,7 @@ function GalleryPanel({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Galeri — hubungkan GDrive di Pengaturan untuk storage besar</CardTitle>
+        <CardTitle className="text-base">Galeri — R2 terkompres (webp ≤1920px, ~78q). Hapus otomatis 10 hari setelah H.</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <Input type="file" accept="image/*,video/*" onChange={upload} disabled={uploading} />
