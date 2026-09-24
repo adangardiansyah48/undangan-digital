@@ -44,7 +44,7 @@ export function InvitationEditor({
     const nextStatus = invitation.status;
     if (nextStatus === "published") {
       const ev = (invitation.data.events ?? [])[0]?.date ?? null;
-      expiredAt = expiryFromEvent(ev, 10) ?? expiredAt;
+      expiredAt = expiryFromEvent(ev, 3) ?? expiredAt;
     }
     const { error } = await supabase
       .from("invitations")
@@ -477,7 +477,7 @@ function GalleryPanel({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Galeri — R2 terkompres (webp ≤1920px, ~78q). Hapus otomatis 10 hari setelah H.</CardTitle>
+        <CardTitle className="text-base">Galeri — R2 terkompres (webp ≤1920px, ~78q). Hapus otomatis H+3 permanen.</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <Input type="file" accept="image/*,video/*" onChange={upload} disabled={uploading} />

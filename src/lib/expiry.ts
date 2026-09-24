@@ -14,7 +14,7 @@ export function eventDate(inv: { data: InvitationData; expired_at: string | null
   return dates[0] ?? null;
 }
 
-export function expiryFromEvent(eventISO: string | null, daysAfter = 10): string | null {
+export function expiryFromEvent(eventISO: string | null, daysAfter = 3): string | null {
   if (!eventISO) return null;
   const base = new Date(eventISO.includes("T") ? eventISO : eventISO + "T00:00:00Z");
   if (Number.isNaN(base.getTime())) return null;
