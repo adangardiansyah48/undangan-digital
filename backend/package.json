@@ -4,16 +4,19 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "dev:worker": "wrangler dev src/worker.ts --port 4000",
     "build": "tsc -p tsconfig.json",
+    "deploy": "wrangler deploy",
     "start": "node dist/server.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.1",
     "cors": "^2.8.5",
     "dotenv": "^16.6.0",
     "express": "^5.1.0",
     "googleapis": "^182.0.0",
-    "multer": "^2.0.2",
-    "@supabase/supabase-js": "^2.117.1"
+    "hono": "^4.13.9",
+    "multer": "^2.0.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.18",
@@ -21,6 +24,7 @@
     "@types/multer": "^2.0.0",
     "@types/node": "^20",
     "tsx": "^4.19.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.138.0"
   }
 }

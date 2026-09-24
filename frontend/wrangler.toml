@@ -1,7 +1,5 @@
 name = "invora-frontend"
 compatibility_date = "2024-12-01"
-# Cloudflare Pages — connect GitHub repo, set:
-# Framework preset: Vite
-# Build command: npm run build   (root: frontend)
-# Output: dist
-# Env: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, VITE_API_URL=https://invora-backend.onrender.com
+# Cloudflare Pages — connect GitHub repo:
+# Framework: Vite | Root: frontend | Build: npm run build | Output: dist
+# Env Pages: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, VITE_API_URL=https://invora-backend.<account>.workers.dev
