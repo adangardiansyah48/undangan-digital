@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title data-field="title">The Wedding Of — Undangan Digital</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;600&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+<style>
+.font-title{font-family:'Great Vibes',cursive}
+.font-serif{font-family:'Playfair Display',serif}
+.font-body{font-family:'Poppins',sans-serif}
+[data-reveal]{opacity:0;transform:translateY(18px);transition:700ms ease}
+[data-reveal].show{opacity:1;transform:none}
+.cover{transition:transform 700ms cubic-bezier(.4,0,.2,1)}
+.btn-gold{background:#c9a86a;color:#1a1a1a}
+.btn-gold:hover{background:#b9975a}
+</style>
+</head>
+<body class="bg-[#f3efe9] font-body antialiased">
+<div class="mx-auto max-w-[440px] bg-white shadow-xl overflow-hidden relative">
+<audio id="bgm" loop preload="none" src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_7a9e3e3c54.mp3"></audio>
+
+<section id="cover" class="cover fixed inset-0 z-50 flex flex-col items-center justify-center text-center px-6 bg-[#0f0f0f] text-white" style="background:radial-gradient(ellipse at top,#2a2a2a 0%,#0f0f0f 70%)">
+  <p class="text-[11px] tracking-[0.35em] opacity-60">THE WEDDING OF</p>
+  <h1 class="font-title text-5xl mt-4 leading-none"><span data-field="groom">Virda</span> <span class="font-serif text-2xl opacity-60">&amp;</span> <span data-field="bride">Papih</span></h1>
+  <p class="text-xs tracking-[0.2em] opacity-50 mt-2" data-field="dateText">12 Desember 2025</p>
+  <div class="mt-10 rounded-2xl border border-white/15 bg-white/5 backdrop-blur px-6 py-5 w-full max-w-[320px]">
+    <p class="text-xs opacity-60">Kepada Yth.<br>Bapak/Ibu/Saudara/i</p>
+    <p id="guestName" class="font-serif text-xl mt-2">Tamu Undangan</p>
+    <p class="text-[10px] opacity-40 mt-1">Tanpa mengurangi rasa hormat</p>
+  </div>
+  <button id="openBtn" class="btn-gold mt-8 rounded-full px-10 py-3 text-sm font-semibold tracking-wide">Buka Undangan</button>
+  <p class="text-[10px] opacity-30 mt-3">* musik menyala otomatis</p>
+</section>
+
+<button id="musicBtn" class="hidden fixed top-3 right-3 z-40 size-10 rounded-full bg-white shadow border grid place-items-center text-sm" aria-label="music">♪</button>
+
+<main id="main" class="hidden">
+  <section data-reveal class="px-6 py-12 text-center bg-[#fdfbf7]">
+    <p class="text-[11px] tracking-[0.3em] text-stone-500">THE WEDDING OF</p>
+    <h2 class="font-title text-4xl mt-3"><span data-field="groom">Virda</span> & <span data-field="bride">Papih</span></h2>
+    <p class="text-xs text-stone-500 mt-2" data-field="dateText">12 Desember 2025</p>
+    <div class="mt-6 flex justify-center gap-2 text-center" id="countdown">
+      <div class="rounded-xl bg-stone-900 text-white px-3 py-3 min-w-[64px]"><div class="text-lg font-semibold" data-cd="d">00</div><div class="text-[10px] opacity-60">Hari</div></div>
+      <div class="rounded-xl bg-stone-900 text-white px-3 py-3 min-w-[64px]"><div class="text-lg font-semibold" data-cd="h">00</div><div class="text-[10px] opacity-60">Jam</div></div>
+      <div class="rounded-xl bg-stone-900 text-white px-3 py-3 min-w-[64px]"><div class="text-lg font-semibold" data-cd="m">00</div><div class="text-[10px] opacity-60">Menit</div></div>
+      <div class="rounded-xl bg-stone-900 text-white px-3 py-3 min-w-[64px]"><div class="text-lg font-semibold" data-cd="s">00</div><div class="text-[10px] opacity-60">Detik</div></div>
+    </div>
+  </section>
+
+  <section data-reveal class="px-6 py-10 text-center border-t">
+    <p class="font-serif text-sm italic text-stone-600">"Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri..."</p>
+    <p class="text-[11px] text-stone-400 mt-1">Q.S. Ar-Rum: 21</p>
+    <p class="text-xs text-stone-500 mt-4">Maha Suci Allah yang telah menciptakan makhluk-Nya berpasang-pasangan. Ya Allah, perkenankanlah:</p>
+  </section>
+
+  <section data-reveal class="px-6 py-10 text-center border-t bg-[#fdfbf7]">
+    <div class="size-28 mx-auto rounded-full overflow-hidden border-4 border-amber-200 bg-stone-100"><img data-field="photoGroom" src="https://picsum.photos/seed/groom/300/300" class="w-full h-full object-cover" alt=""></div>
+    <h3 class="font-serif text-xl mt-4" data-field="groomFull">Virda Manda Sari</h3>
+    <p class="text-xs text-stone-500" data-field="groomParents">Putri Pertama dari Bapak Putra Man & Ibu Putri Min</p>
+    <a data-field="groomIg" href="#" class="text-xs text-amber-700 underline">Instagram</a>
+    <p class="font-title text-3xl my-4">&amp;</p>
+    <div class="size-28 mx-auto rounded-full overflow-hidden border-4 border-amber-200 bg-stone-100"><img data-field="photoBride" src="https://picsum.photos/seed/bride/300/300" class="w-full h-full object-cover" alt=""></div>
+    <h3 class="font-serif text-xl mt-4" data-field="brideFull">Papih Manmin</h3>
+    <p class="text-xs text-stone-500" data-field="brideParents">Putra Pertama dari Bapak Putra Man & Ibu Putri Min</p>
+    <a data-field="brideIg" href="#" class="text-xs text-amber-700 underline">Instagram</a>
+  </section>
+
+  <section data-reveal class="px-6 py-10 border-t">
+    <h3 class="font-serif text-center text-lg">Save The Date</h3>
+    <div class="mt-6 grid gap-4">
+      <div class="rounded-2xl border p-4 text-center bg-white">
+        <p class="text-xs tracking-[0.2em] text-stone-400">AKAD NIKAH</p>
+        <p class="font-serif mt-1" data-field="akadDate">Minggu, 12 Desember 2025</p>
+        <p class="text-xs text-stone-500" data-field="akadTime">08.00 WIB — Selesai</p>
+        <p class="text-sm mt-2" data-field="akadPlace">Kediaman Mempelai Wanita</p>
+        <p class="text-xs text-stone-500" data-field="akadAddr">Kotakulon, Sumedang</p>
+        <a data-field="akadMap" href="https://maps.google.com" target="_blank" class="inline-block mt-3 rounded-full border px-4 py-1.5 text-xs">Buka Maps</a>
+      </div>
+      <div class="rounded-2xl border p-4 text-center bg-white">
+        <p class="text-xs tracking-[0.2em] text-stone-400">RESEPSI</p>
+        <p class="font-serif mt-1" data-field="resepsiDate">Minggu, 12 Desember 2025</p>
+        <p class="text-xs text-stone-500" data-field="resepsiTime">08.00 WIB — Selesai</p>
+        <p class="text-sm mt-2" data-field="resepsiPlace">Kediaman Mempelai Wanita</p>
+        <p class="text-xs text-stone-500" data-field="resepsiAddr">Kotakulon, Sumedang</p>
+        <a data-field="resepsiMap" href="https://maps.google.com" target="_blank" class="inline-block mt-3 rounded-full border px-4 py-1.5 text-xs">Buka Maps</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-reveal class="px-6 py-10 border-t">
+    <h3 class="font-serif text-center text-lg">Gallery</h3>
+    <p class="text-xs text-center text-stone-400">Momen bahagia kami</p>
+    <div class="mt-4 grid grid-cols-2 gap-2" id="gallery">
+      <img src="https://picsum.photos/seed/gal1/400/400" class="aspect-square object-cover rounded-xl" loading="lazy">
+      <img src="https://picsum.photos/seed/gal2/400/400" class="aspect-square object-cover rounded-xl" loading="lazy">
+      <img src="https://picsum.photos/seed/gal3/400/400" class="aspect-square object-cover rounded-xl" loading="lazy">
+      <img src="https://picsum.photos/seed/gal4/400/400" class="aspect-square object-cover rounded-xl" loading="lazy">
+    </div>
+  </section>
+
+  <section data-reveal class="px-6 py-10 border-t bg-[#fdfbf7]">
+    <h3 class="font-serif text-center text-lg">Love Story</h3>
+    <div class="mt-6 relative border-l border-amber-200 ml-4 pl-6 space-y-6 text-sm">
+      <div><div class="absolute -left-1.5 size-3 rounded-full bg-amber-400"></div><p class="text-xs text-amber-700">06 Desember 2022</p><p class="text-stone-600">Awal bertemu di kampus, saling sapa pertama kali.</p></div>
+      <div><div class="absolute -left-1.5 size-3 rounded-full bg-amber-400" style="top:52%"></div><p class="text-xs text-amber-700">12 Desember 2022</p><p class="text-stone-600">Lamaran keluarga, mengikat janji suci.</p></div>
+      <div><div class="absolute -left-1.5 size-3 rounded-full bg-amber-400" style="top:78%"></div><p class="text-xs text-amber-700">12 Desember 2025</p><p class="text-stone-600">Hari bahagia, bersatu dalam ridha Allah.</p></div>
+    </div>
+  </section>
+
+  <section data-reveal class="px-6 py-10 border-t">
+    <h3 class="font-serif text-center text-lg">Amplop Digital</h3>
+    <p class="text-xs text-center text-stone-400">Doa restu Anda sangat berarti. Jika berkenan berbagi kasih:</p>
+    <div class="mt-4 space-y-3">
+      <div class="rounded-2xl border p-4 flex items-center justify-between bg-white">
+        <div><p class="text-xs text-stone-400">BRI</p><p class="font-mono text-sm" data-field="rek1">081343031501</p><p class="text-xs text-stone-500" data-field="rekName1">a.n. Laila</p></div>
+        <button class="copyBtn rounded-full border px-3 py-1 text-xs" data-copy="rek1">Salin</button>
+      </div>
+      <div class="rounded-2xl border p-4 flex items-center justify-between bg-white">
+        <div><p class="text-xs text-stone-400">DANA</p><p class="font-mono text-sm" data-field="rek2">081343031501</p><p class="text-xs text-stone-500" data-field="rekName2">a.n. Papih</p></div>
+        <button class="copyBtn rounded-full border px-3 py-1 text-xs" data-copy="rek2">Salin</button>
+      </div>
+    </div>
+  </section>
+
+  <section data-reveal class="px-6 py-10 border-t bg-[#fdfbf7]">
+    <h3 class="font-serif text-center text-lg">RSVP & Ucapan</h3>
+    <form id="wishForm" class="mt-4 space-y-3 bg-white rounded-2xl border p-4">
+      <input id="wName" placeholder="Nama" required class="w-full rounded-xl border px-3 py-2 text-sm">
+      <textarea id="wMsg" placeholder="Ucapan & doa" required rows="3" class="w-full rounded-xl border px-3 py-2 text-sm"></textarea>
+      <div class="flex gap-2 text-xs">
+        <label class="flex-1 border rounded-full py-2 text-center has-[:checked]:bg-stone-900 has-[:checked]:text-white"><input type="radio" name="hadir" value="Hadir" checked class="hidden"> Hadir</label>
+        <label class="flex-1 border rounded-full py-2 text-center has-[:checked]:bg-stone-900 has-[:checked]:text-white"><input type="radio" name="hadir" value="Tidak Hadir" class="hidden"> Tidak Hadir</label>
+        <label class="flex-1 border rounded-full py-2 text-center has-[:checked]:bg-stone-900 has-[:checked]:text-white"><input type="radio" name="hadir" value="Akan Hadir" class="hidden"> Akan Hadir</label>
+      </div>
+      <button class="w-full rounded-full bg-stone-900 text-white py-2 text-sm">Kirim Ucapan</button>
+    </form>
+    <div id="wishList" class="mt-4 space-y-2 text-sm">
+      <div class="rounded-xl border bg-white p-3"><b>Desi</b> <span class="text-xs text-stone-400">· Tidak Hadir</span><p class="text-stone-600">Mohon maaf kak aku gabisa hadir soalnya sibuk mau nungguin ayam bertelur</p></div>
+      <div class="rounded-xl border bg-white p-3"><b>Sendy</b> <span class="text-xs text-stone-400">· Hadir</span><p class="text-stone-600">Samawa</p></div>
+    </div>
+  </section>
+
+  <footer class="px-6 py-10 text-center border-t bg-stone-900 text-stone-300">
+    <p class="font-title text-2xl">Virda & Papih</p>
+    <p class="text-xs opacity-60 mt-2">Merupakan kehormatan apabila Bapak/Ibu berkenan hadir.<br>Sampai jumpa di hari bahagia kami.</p>
+    <p class="text-[10px] opacity-30 mt-4">mstory.id — Undangan Digital Elegant</p>
+  </footer>
+</main>
+</div>
+
+<script>
+const q=new URLSearchParams(location.search);
+const get=(k,d)=>q.get(k)||d;
+document.querySelectorAll('[data-field]').forEach(el=>{
+  const k=el.getAttribute('data-field');
+  const map={groom:get('groom','Virda'),bride:get('bride','Papih'),groomFull:get('groomFull','Virda Manda Sari'),brideFull:get('brideFull','Papih Manmin'),groomParents:get('groomParents','Putri Pertama dari Bapak Putra Man & Ibu Putri Min'),brideParents:get('brideParents','Putra Pertama dari Bapak Putra Man & Ibu Putri Min'),dateText:get('dateText','12 Desember 2025'),title:`The Wedding Of ${get('groom','Virda')} & ${get('bride','Papih')}`,akadDate:get('akadDate','Minggu, 12 Desember 2025'),akadTime:get('akadTime','08.00 WIB — Selesai'),akadPlace:get('akadPlace','Kediaman Mempelai Wanita'),akadAddr:get('akadAddr','Kotakulon, Sumedang'),resepsiDate:get('resepsiDate','Minggu, 12 Desember 2025'),resepsiTime:get('resepsiTime','08.00 WIB — Selesai'),resepsiPlace:get('resepsiPlace','Kediaman Mempelai Wanita'),resepsiAddr:get('resepsiAddr','Kotakulon, Sumedang'),rek1:get('rek1','081343031501'),rek2:get('rek2','081343031501'),rekName1:get('rekName1','a.n. Laila'),rekName2:get('rekName2','a.n. Papih')};
+  if(map[k]!==undefined) el.textContent=map[k];
+});
+document.getElementById('guestName').textContent=get('to','Tamu Undangan');
+const bgm=document.getElementById('bgm');
+if(get('music','')) bgm.src=get('music','');
+const dstr=get('date','2025-12-12');const tstr=get('time','08:00');
+const target=new Date(dstr+'T'+tstr+':00');
+function tick(){
+  const diff=Math.max(0,target-Date.now());
+  const d=Math.floor(diff/86400000),h=Math.floor(diff%86400000/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000);
+  document.querySelector('[data-cd=d]').textContent=String(d).padStart(2,'0');
+  document.querySelector('[data-cd=h]').textContent=String(h).padStart(2,'0');
+  document.querySelector('[data-cd=m]').textContent=String(m).padStart(2,'0');
+  document.querySelector('[data-cd=s]').textContent=String(s).padStart(2,'0');
+}
+setInterval(tick,1000);tick();
+const cover=document.getElementById('cover'),main=document.getElementById('main'),musicBtn=document.getElementById('musicBtn');
+let playing=false;
+document.getElementById('openBtn').onclick=()=>{
+  cover.style.transform='translateY(-100%)';
+  setTimeout(()=>{cover.style.display='none';main.classList.remove('hidden');musicBtn.classList.remove('hidden');window.scrollTo(0,0)},600);
+  bgm.play().then(()=>{playing=true;musicBtn.textContent='❚❚'}).catch(()=>{});
+  document.querySelectorAll('[data-reveal]').forEach(el=>observer.observe(el));
+};
+musicBtn.onclick=()=>{
+  if(playing){bgm.pause();playing=false;musicBtn.textContent='♪';} else {bgm.play().then(()=>{playing=true;musicBtn.textContent='❚❚'}).catch(()=>{})}
+};
+document.querySelectorAll('.copyBtn').forEach(b=>b.onclick=()=>{
+  const k=b.dataset.copy;const v=document.querySelector(`[data-field=${k}]`).textContent;
+  navigator.clipboard.writeText(v).then(()=>{b.textContent='Tersalin!';setTimeout(()=>b.textContent='Salin',1200)});
+});
+document.getElementById('wishForm').onsubmit=e=>{
+  e.preventDefault();
+  const n=document.getElementById('wName').value.trim(),m=document.getElementById('wMsg').value.trim();
+  const h=document.querySelector('input[name=hadir]:checked').value;
+  if(!n||!m) return;
+  const d=document.createElement('div');d.className='rounded-xl border bg-white p-3';d.innerHTML=`<b>${n}</b> <span class="text-xs text-stone-400">· ${h}</span><p class="text-stone-600">${m}</p>`;
+  document.getElementById('wishList').prepend(d);
+  e.target.reset();
+};
+const observer=new IntersectionObserver(ents=>ents.forEach(en=>en.isIntersecting&&en.target.classList.add('show')),{threshold:0.15});
+</script>
+</body>
+</html>
