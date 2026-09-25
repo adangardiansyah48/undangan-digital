@@ -202,6 +202,17 @@ function seedFallback(active: string): SeedItem[] {
     { slug: "walimatul-khitan-elite", category: "non-wedding", title: "Walimatul Khitan Elite", description: "Gold navy islami", is_premium: false, thumbnail_url: null },
     { slug: "aqiqah-hana-prameswari", category: "non-wedding", title: "Aqiqah Hana", description: "Blush prameswari", is_premium: false, thumbnail_url: null },
     { slug: "ultah-aria", category: "non-wedding", title: "Ultah Aria", description: "Kids confetti elegant", is_premium: false, thumbnail_url: null },
+    { slug: "adat-jawa", category: "adat", title: "Adat Jawa", description: "Batik & gunungan", is_premium: true, thumbnail_url: null },
+    { slug: "adat-sunda", category: "adat", title: "Adat Sunda", description: "Panggih sunda", is_premium: true, thumbnail_url: null },
+    { slug: "adat-minang", category: "adat", title: "Adat Minang", description: "Songket & rumah gadang", is_premium: true, thumbnail_url: null },
+    { slug: "adat-batak", category: "adat", title: "Adat Batak", description: "Ulos & gorga", is_premium: true, thumbnail_url: null },
+    { slug: "adat-bali", category: "adat", title: "Adat Bali", description: "Pura, canang, emas-merah", is_premium: true, thumbnail_url: null },
+    { slug: "adat-melayu", category: "adat", title: "Adat Melayu", description: "Tepak sirih, songket kuning", is_premium: true, thumbnail_url: null },
+    { slug: "animasi-1", category: "animasi", title: "Animasi Soft", description: "Transisi lembut + particle", is_premium: true, thumbnail_url: null },
+    { slug: "floral-blush", category: "wedding", title: "Floral Blush", description: "Bunga blush pink romantis", is_premium: true, thumbnail_url: null },
+    { slug: "khitan-1", category: "non-wedding", title: "Khitanan Ceria", description: "Tema anak, warna cerah", is_premium: false, thumbnail_url: null },
+    { slug: "aqiqah-1", category: "non-wedding", title: "Aqiqah Soft", description: "Tema bayi, pastel", is_premium: false, thumbnail_url: null },
+    { slug: "birthday-1", category: "non-wedding", title: "Ultah Anak", description: "Kartun & confetti", is_premium: false, thumbnail_url: null },
   ];
   return active === "all" ? all : all.filter((t) => t.category === active);
 }
