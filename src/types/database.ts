@@ -80,6 +80,7 @@ export type InvitationData = {
     address: string;
   };
   liveStreamUrl?: string;
+  healthProtocols?: boolean;
 };
 
 export type Invitation = {
