@@ -133,3 +133,11 @@
 .font-serif {
   font-family: var(--font-serif), ui-serif, Georgia, serif;
 }
+.font-playfair { font-family: var(--font-playfair), serif; }
+.font-cormorant { font-family: var(--font-cormorant), serif; }
+.font-greatvibes { font-family: var(--font-greatvibes), cursive; }
+.font-montserrat { font-family: var(--font-montserrat), sans-serif; }
+.font-cinzel { font-family: var(--font-cinzel), serif; }
+.font-dancing { font-family: var(--font-dancing), cursive; }
+.font-poppins { font-family: var(--font-poppins), sans-serif; }
+.font-libre { font-family: var(--font-libre), serif; }

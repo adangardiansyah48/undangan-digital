@@ -17,32 +17,35 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-          <span className="grid size-8 place-items-center rounded-full bg-primary text-primary-foreground text-sm">
-            I
+    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-xl">
+      <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-4 md:h-[84px]">
+        <Link href="/" className="flex items-center gap-3">
+          <span className="grid size-10 place-items-center rounded-full bg-primary text-primary-foreground font-serif text-lg font-bold shadow-sm md:size-11 md:text-xl">
+            M
           </span>
-          {APP_NAME}
+          <span className="font-serif text-xl font-semibold tracking-tight md:text-2xl">{APP_NAME}</span>
+          <span className="hidden text-xs tracking-[0.2em] uppercase text-muted-foreground md:inline">Elegant</span>
         </Link>
 
-        <nav className="hidden items-center gap-6 text-sm md:flex">
+        <nav className="hidden items-center gap-8 md:flex">
           {NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="text-muted-foreground transition-colors hover:text-foreground"
+              className="text-[15px] font-medium tracking-wide text-foreground/70 transition-colors hover:text-foreground"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 md:flex">
-          <Button variant="ghost" render={<Link href="/login" />}>
+        <div className="hidden items-center gap-3 md:flex">
+          <Button variant="ghost" size="lg" render={<Link href="/login" />}>
             Masuk
           </Button>
-          <Button render={<Link href="/register" />}>Mulai Gratis</Button>
+          <Button size="lg" className="rounded-full px-6" render={<Link href="/register" />}>
+            Mulai Gratis
+          </Button>
         </div>
 
         <Button

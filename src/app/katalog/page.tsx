@@ -59,51 +59,52 @@ export default async function KatalogPage({
             <section key={sec.cat}>
               <h2 className="border-l-4 border-primary pl-3 text-lg font-semibold capitalize">{sec.label}</h2>
               <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {sec.items.map((t) => (
-                  <article
-                    key={t.slug}
-                    className="group overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition hover:shadow-md"
-                  >
-                    <div className="relative aspect-[3/4.2] overflow-hidden bg-muted">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={t.thumbnail_url || mockGradient(t.slug, t.category)}
-                        alt={t.title}
-                        className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-                        loading="lazy"
-                      />
-                      {t.is_new && (
-                        <span className="absolute left-2 top-2 rounded-full bg-amber-500 px-2.5 py-1 text-[10px] font-bold text-white shadow">
-                          NEW !!!
-                        </span>
-                      )}
-                      {t.is_premium && (
-                        <span className="absolute right-2 top-2 rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground">
-                          Premium
-                        </span>
-                      )}
-                    </div>
-                    <div className="space-y-2 p-4">
-                      <h3 className="text-center text-sm font-semibold uppercase tracking-wide">{t.title}</h3>
-                      {t.description && (
-                        <p className="text-center text-xs text-muted-foreground line-clamp-1">{t.description}</p>
-                      )}
-                      <div className="flex justify-center gap-2 pt-1">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="rounded-full px-4"
-                          render={<Link href={`/preview/${t.slug}`} />}
-                        >
-                          Lihat Contoh
-                        </Button>
-                        <Button size="sm" className="rounded-full px-4" render={<Link href={`/register?template=${t.slug}`} />}>
-                          Pakai tema
-                        </Button>
+                {sec.items.map((t, idx) => {
+                  const font = fonts[idx % fonts.length];
+                  const accent = accents[t.category as keyof typeof accents] ?? accents.wedding;
+                  return (
+                    <article
+                      key={t.slug}
+                      className="group overflow-hidden rounded-2xl border bg-card shadow-sm transition hover:shadow-lg hover:-translate-y-0.5"
+                      style={{ borderColor: accent.border }}
+                    >
+                      <div className="relative aspect-[3/4.2] overflow-hidden bg-muted">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={t.thumbnail_url || mockGradient(t.slug, t.category)}
+                          alt={t.title}
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition" />
+                        {t.is_new && (
+                          <span className="absolute left-2 top-2 rounded-full bg-amber-500 px-2.5 py-1 text-[10px] font-bold text-white shadow">
+                            NEW !!!
+                          </span>
+                        )}
+                        {t.is_premium && (
+                          <span className="absolute right-2 top-2 rounded-full px-2.5 py-1 text-[10px] font-bold text-white shadow" style={{ background: accent.badge }}>
+                            Premium
+                          </span>
+                        )}
                       </div>
-                    </div>
-                  </article>
-                ))}
+                      <div className="space-y-2 p-4 text-center">
+                        <h3 className={`text-base font-semibold ${font}`}>{t.title}</h3>
+                        {t.description && (
+                          <p className="text-xs text-muted-foreground line-clamp-1">{t.description}</p>
+                        )}
+                        <div className="flex justify-center gap-2 pt-2">
+                          <Button size="sm" variant="outline" className="rounded-full px-4" render={<Link href={`/preview/${t.slug}`} />}>
+                            Lihat Contoh
+                          </Button>
+                          <Button size="sm" className="rounded-full px-4" style={{ background: accent.badge, color: "#fff", borderColor: accent.badge }} render={<Link href={`/register?template=${t.slug}`} />}>
+                            Pakai tema
+                          </Button>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
               </div>
               {sec.items.length === 0 && (
                 <p className="mt-4 text-sm text-muted-foreground">Coming soon untuk kategori ini.</p>
@@ -116,6 +117,14 @@ export default async function KatalogPage({
     </>
   );
 }
+
+const fonts = ["font-playfair", "font-cormorant", "font-greatvibes", "font-cinzel", "font-dancing", "font-libre", "font-montserrat", "font-poppins"] as const;
+const accents = {
+  wedding: { border: "oklch(0.92 0.04 80)", badge: "oklch(0.35 0.05 45)" },
+  adat: { border: "oklch(0.90 0.05 30)", badge: "oklch(0.45 0.12 25)" },
+  animasi: { border: "oklch(0.90 0.04 260)", badge: "oklch(0.50 0.14 260)" },
+  "non-wedding": { border: "oklch(0.92 0.04 150)", badge: "oklch(0.45 0.10 150)" },
+} as const;
 
 type SeedItem = {
   slug: string;
