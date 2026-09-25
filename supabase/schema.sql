@@ -304,5 +304,15 @@ insert into public.templates (slug, category, subcategory, title, description, t
   ('animasi-celestine', 'animasi', null, 'Animasi Célestine', 'Aurora shimmer', null, true, 47),
   ('walimatul-khitan-elite', 'non-wedding', 'khitan', 'Walimatul Khitan Elite', 'Gold navy islami', null, false, 48),
   ('aqiqah-hana-prameswari', 'non-wedding', 'aqiqah', 'Aqiqah Hana', 'Blush prameswari', null, false, 49),
-  ('ultah-aria', 'non-wedding', 'birthday', 'Ultah Aria', 'Kids confetti elegant', null, false, 50)
+  ('ultah-aria', 'non-wedding', 'birthday', 'Ultah Aria', 'Kids confetti elegant', null, false, 50),
+  ('opaline', 'wedding', null, 'Opaline', 'Pearl serif soft', null, true, 51),
+  ('velours-nuit', 'wedding', null, 'Velours Nuit', 'Midnight velvet', null, true, 52),
+  ('atelier-blush', 'wedding', null, 'Atelier Blush', 'Studio blush line', null, true, 53),
+  ('maison-lace', 'wedding', null, 'Maison Lace', 'Lace ivory fine', null, false, 54),
+  ('jardin-noir', 'wedding', null, 'Jardin Noir', 'Dark garden rose', null, true, 55),
+  ('aureline', 'wedding', null, 'Aurèline', 'Gold aureline', null, true, 56),
+  ('brume', 'wedding', null, 'Brume', 'Mist veil elegant', null, false, 57),
+  ('chantelle', 'wedding', null, 'Chantelle', 'Chantilly script', null, true, 58),
+  ('seraphine', 'wedding', null, 'Séraphine', 'Angel silk', null, false, 59),
+  ('divine-ivory', 'wedding', null, 'Divine Ivory', 'Divine column', null, true, 60)
 on conflict (slug) do nothing;
