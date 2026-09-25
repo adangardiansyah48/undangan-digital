@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Countdown } from "@/components/invitation/countdown";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import type { GalleryItem, Invitation, Wish } from "@/types/database";
+import { getTheme } from "@/components/invitation/themes";
 
 export function PublicInvitation({
   invitation,
@@ -35,6 +36,7 @@ export function PublicInvitation({
   const bride = data.couple?.bride?.name ?? "Sari";
   const groom = data.couple?.groom?.name ?? "Andi";
   const together = `${groom} & ${bride}`;
+  const theme = getTheme(invitation.slug);
 
   async function sendWish(e: React.FormEvent) {
     e.preventDefault();
@@ -69,30 +71,42 @@ export function PublicInvitation({
     }
   }
 
+  useEffect(() => {
+    if (!open || !data.musicUrl || playing) return;
+    const t = setTimeout(() => audioRef.current?.play().then(() => setPlaying(true)).catch(() => {}), 800);
+    return () => clearTimeout(t);
+  }, [open, data.musicUrl, playing]);
+
+  useEffect(() => {
+    if (!open) return;
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("is-visible")), { threshold: 0.15 });
+    document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [open]);
+
   const displayGuest = guestName ?? "Tamu Undangan";
 
   if (!open) {
     return (
-      <main className="flex min-h-svh flex-col items-center justify-center bg-muted/20 px-4 py-16">
-        <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground">{invitation.title ?? together}</p>
-        <h1 className="font-serif mt-6 text-center text-4xl">{together}</h1>
-        <p className="mt-2 text-center text-sm text-muted-foreground">Kepada: {displayGuest}</p>
-        <Button size="lg" className="mt-8 rounded-full px-10" onClick={() => setOpen(true)}>
+      <main className={`flex min-h-svh flex-col items-center justify-center px-4 py-16 ${theme.cover}`}>
+        <p className={`text-xs tracking-[0.3em] uppercase opacity-70 ${theme.fontBody}`}>{invitation.title ?? together}</p>
+        <h1 className={`mt-6 text-center text-4xl ${theme.fontTitle}`}>{together}</h1>
+        <p className="mt-2 text-center text-sm opacity-80">Kepada: {displayGuest}</p>
+        <Button size="lg" className={`mt-8 rounded-full px-10 ${theme.accent}`} onClick={() => setOpen(true)}>
           Buka Undangan
         </Button>
-        <p className="mt-4 text-center text-xs text-muted-foreground">
-          Musik &amp; halaman lengkap setelah membuka.
-        </p>
+        <p className="mt-4 text-center text-xs opacity-60">Auto sound setelah membuka · scroll animasi</p>
       </main>
     );
   }
 
   return (
-    <main className="bg-muted/20">
+    <main className={`${theme.bg} ${theme.text}`}>
+      <style>{`[data-reveal]{opacity:0;transform:translateY(16px);transition:600ms ease}[data-reveal].is-visible{opacity:1;transform:none}`}</style>
       {data.musicUrl && (
         <audio ref={audioRef} src={data.musicUrl} loop preload="none" className="hidden" />
       )}
-      <div className="mx-auto max-w-md border-x border-border bg-background min-h-svh">
+      <div className={`mx-auto max-w-md border-x ${theme.divider} bg-background min-h-svh`}>
         {data.musicUrl && (
           <button
             onClick={toggleMusic}
@@ -103,9 +117,9 @@ export function PublicInvitation({
           </button>
         )}
 
-        <section className="px-6 py-12 text-center">
-          <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground">The Wedding of</p>
-          <h1 className="font-serif mt-4 text-4xl">{together}</h1>
+        <section data-reveal className="px-6 py-12 text-center">
+          <p className="text-xs tracking-[0.3em] uppercase opacity-60">The Wedding of</p>
+          <h1 className={`mt-4 text-4xl ${theme.fontTitle}`}>{together}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             {events?.[0]?.date
               ? new Date(`${events[0].date}T12:00:00`).toLocaleDateString("id-ID", {
@@ -130,23 +144,23 @@ export function PublicInvitation({
               </>
             )}
             {data.couple && (
-              <div className="mt-8 grid gap-6">
+              <div className={`mt-8 grid gap-6 ${theme.coupleLayout === "side" ? "md:grid-cols-[1fr_auto_1fr] items-center" : ""}`}>
                 <div className="text-center">
-                  <div className="mx-auto size-24 overflow-hidden rounded-full border-4 border-primary/20 bg-muted">
+                  <div className={`mx-auto overflow-hidden bg-muted ${theme.coupleLayout === "arch" ? "size-32 rounded-t-[100px] rounded-b-2xl border-4" : "size-24 rounded-full border-4"} ${theme.divider}`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    {data.couple.bride.photo ? <img src={data.couple.bride.photo} alt={data.couple.bride.name} className="h-full w-full object-cover" /> : <span className="grid h-full place-items-center font-serif text-2xl">{data.couple.bride.name[0]}</span>}
+                    {data.couple.bride.photo ? <img src={data.couple.bride.photo} alt={data.couple.bride.name} className="h-full w-full object-cover" /> : <span className={`grid h-full place-items-center text-2xl ${theme.fontTitle}`}>{data.couple.bride.name[0]}</span>}
                   </div>
-                  <p className="font-serif mt-3 text-lg">{data.couple.bride.fullName || data.couple.bride.name}</p>
-                  <p className="text-xs text-muted-foreground">{data.couple.bride.parents}</p>
+                  <p className={`${theme.fontTitle} mt-3 text-lg`}>{data.couple.bride.fullName || data.couple.bride.name}</p>
+                  <p className="text-xs opacity-60">{data.couple.bride.parents}</p>
                 </div>
-                <p className="text-center font-serif text-2xl">&amp;</p>
+                <p className={`text-center text-2xl ${theme.fontTitle}`}>{theme.coupleLayout === "side" ? "•" : "&"}</p>
                 <div className="text-center">
-                  <div className="mx-auto size-24 overflow-hidden rounded-full border-4 border-primary/20 bg-muted">
+                  <div className={`mx-auto overflow-hidden bg-muted ${theme.coupleLayout === "arch" ? "size-32 rounded-t-[100px] rounded-b-2xl border-4" : "size-24 rounded-full border-4"} ${theme.divider}`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    {data.couple.groom.photo ? <img src={data.couple.groom.photo} alt={data.couple.groom.name} className="h-full w-full object-cover" /> : <span className="grid h-full place-items-center font-serif text-2xl">{data.couple.groom.name[0]}</span>}
+                    {data.couple.groom.photo ? <img src={data.couple.groom.photo} alt={data.couple.groom.name} className="h-full w-full object-cover" /> : <span className={`grid h-full place-items-center text-2xl ${theme.fontTitle}`}>{data.couple.groom.name[0]}</span>}
                   </div>
-                  <p className="font-serif mt-3 text-lg">{data.couple.groom.fullName || data.couple.groom.name}</p>
-                  <p className="text-xs text-muted-foreground">{data.couple.groom.parents}</p>
+                  <p className={`${theme.fontTitle} mt-3 text-lg`}>{data.couple.groom.fullName || data.couple.groom.name}</p>
+                  <p className="text-xs opacity-60">{data.couple.groom.parents}</p>
                 </div>
               </div>
             )}
@@ -155,7 +169,7 @@ export function PublicInvitation({
         )}
 
         {(firstDate || (events && events.length)) && (
-          <section id="event" className="border-t border-border px-6 py-10">
+          <section data-reveal id="event" className={`border-t px-6 py-10 ${theme.divider}`}>
             {firstDate && <Countdown targetIso={new Date(firstDate).toISOString()} />}
             {events?.length ? (
               <div className="mt-6 space-y-4">
@@ -196,7 +210,7 @@ export function PublicInvitation({
         )}
 
         {initialGallery.length > 0 && (
-          <section id="gallery" className="border-t border-border px-6 py-10">
+          <section data-reveal id="gallery" className={`border-t px-6 py-10 ${theme.divider}`}>
             <h2 className="font-serif text-xl">Gallery</h2>
             <div className="mt-4 grid grid-cols-2 gap-2">
               {initialGallery.map((it) => (
@@ -208,7 +222,7 @@ export function PublicInvitation({
         )}
 
         {events?.length || data.banks?.length ? (
-          <section id="gift" className="border-t border-border px-6 py-10">
+          <section data-reveal id="gift" className={`border-t px-6 py-10 ${theme.divider}`}>
             <h2 className="font-serif text-xl">Amplop Digital</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               Doa restu sudah cukup bermakna. Jika berkenan berbagi kasih, silakan pakai.
@@ -237,7 +251,7 @@ export function PublicInvitation({
           </section>
         ) : null}
 
-        <section id="wish" className="border-t border-border px-6 py-10">
+        <section data-reveal id="wish" className={`border-t px-6 py-10 ${theme.divider}`}>
           <h2 className="font-serif text-xl">Ucapan &amp; RSVP</h2>
           <form onSubmit={sendWish} className="mt-4 space-y-3">
             <div>
