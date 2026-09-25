@@ -130,17 +130,27 @@ export function PublicInvitation({
               </>
             )}
             {data.couple && (
-              <div className="mt-8 grid gap-6 md:grid-cols-2">
-                <div>
-                  <p className="font-serif text-lg">{data.couple.groom.fullName || data.couple.groom.name}</p>
-                  <p className="text-xs text-muted-foreground">{data.couple.groom.parents}</p>
-                </div>
-                <div>
-                  <p className="font-serif text-lg">{data.couple.bride.fullName || data.couple.bride.name}</p>
+              <div className="mt-8 grid gap-6">
+                <div className="text-center">
+                  <div className="mx-auto size-24 overflow-hidden rounded-full border-4 border-primary/20 bg-muted">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    {data.couple.bride.photo ? <img src={data.couple.bride.photo} alt={data.couple.bride.name} className="h-full w-full object-cover" /> : <span className="grid h-full place-items-center font-serif text-2xl">{data.couple.bride.name[0]}</span>}
+                  </div>
+                  <p className="font-serif mt-3 text-lg">{data.couple.bride.fullName || data.couple.bride.name}</p>
                   <p className="text-xs text-muted-foreground">{data.couple.bride.parents}</p>
+                </div>
+                <p className="text-center font-serif text-2xl">&amp;</p>
+                <div className="text-center">
+                  <div className="mx-auto size-24 overflow-hidden rounded-full border-4 border-primary/20 bg-muted">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    {data.couple.groom.photo ? <img src={data.couple.groom.photo} alt={data.couple.groom.name} className="h-full w-full object-cover" /> : <span className="grid h-full place-items-center font-serif text-2xl">{data.couple.groom.name[0]}</span>}
+                  </div>
+                  <p className="font-serif mt-3 text-lg">{data.couple.groom.fullName || data.couple.groom.name}</p>
+                  <p className="text-xs text-muted-foreground">{data.couple.groom.parents}</p>
                 </div>
               </div>
             )}
+            {data.story && <p className="mt-8 text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">{data.story as string}</p>}
           </section>
         )}
 
@@ -267,6 +277,16 @@ export function PublicInvitation({
           </div>
         </section>
 
+        {data.healthProtocols && (
+          <section className="border-t border-border px-6 py-8 text-center">
+            <h3 className="font-serif">Health Protocols</h3>
+            <div className="mt-4 grid grid-cols-2 gap-3 text-xs text-muted-foreground">
+              {["Pakai Masker", "Tidak Berjabat Tangan", "Jaga Jarak & Hindari Kerumunan", "Handsantizer"].map((h) => (
+                <div key={h} className="rounded-xl border border-border bg-muted/30 py-3">{h}</div>
+              ))}
+            </div>
+          </section>
+        )}
         <div className="border-t border-border px-6 py-8 text-center text-xs text-muted-foreground">
           Terima kasih — {together}
         </div>
