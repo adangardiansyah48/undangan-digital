@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 
 type Props = {
@@ -9,6 +11,10 @@ type Props = {
 export default async function PreviewPage({ params, searchParams }: Props) {
   const { slug } = await params;
   const { to } = await searchParams;
+  const supabase = await createClient();
+  const { data: demo } = await supabase.from("invitations").select("slug").eq("slug", slug).eq("status", "published").maybeSingle();
+  if (demo) redirect(`/${slug}${to ? `?to=${encodeURIComponent(to)}` : ""}`);
+
   const guest = to ? decodeURIComponent(to) : "Tamu Undangan";
 
   return (
@@ -29,7 +35,7 @@ export default async function PreviewPage({ params, searchParams }: Props) {
             Buka Undangan
           </Button>
           <p className="mt-6 text-xs text-muted-foreground">
-            Nama tamu dari query: <code>?to=NamaTamu</code>
+            Demo belum ada. Hubungi admin.
           </p>
         </div>
 

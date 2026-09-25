@@ -45,13 +45,12 @@ export default function NewInvitationPage() {
       if (!user) throw new Error("Harus login dulu");
 
       let templateId: string | null = null;
+      let cloneData: Record<string, unknown> = {};
       if (presetTemplate) {
-        const { data } = await supabase
-          .from("templates")
-          .select("id")
-          .eq("slug", presetTemplate)
-          .maybeSingle();
-        templateId = data?.id ?? null;
+        const { data: tmpl } = await supabase.from("templates").select("id").eq("slug", presetTemplate).maybeSingle();
+        templateId = tmpl?.id ?? null;
+        const { data: demo } = await supabase.from("invitations").select("data").eq("slug", presetTemplate).eq("status", "published").maybeSingle();
+        if (demo?.data && typeof demo.data === "object") cloneData = demo.data as Record<string, unknown>;
       }
 
       const expiredAt = tier === "platinum" ? null : tierExpiry(tier);
@@ -66,7 +65,7 @@ export default function NewInvitationPage() {
           track,
           tier,
           expired_at: expiredAt,
-          data: {},
+          data: cloneData,
           status: "draft",
         })
         .select("id")

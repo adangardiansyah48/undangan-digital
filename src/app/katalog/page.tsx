@@ -94,7 +94,7 @@ export default async function KatalogPage({
                           <p className="text-xs text-muted-foreground line-clamp-1">{t.description}</p>
                         )}
                         <div className="flex justify-center gap-2 pt-2">
-                          <Button size="sm" variant="outline" className="rounded-full px-4" render={<Link href={`/preview/${t.slug}`} />}>
+                          <Button size="sm" variant="outline" className="rounded-full px-4" render={<Link href={`/${t.slug}`} />}>
                             Lihat Contoh
                           </Button>
                           <Button size="sm" className="rounded-full px-4" style={{ background: accent.badge, color: "#fff", borderColor: accent.badge }} render={<Link href={`/register?template=${t.slug}`} />}>
@@ -192,6 +192,16 @@ function seedFallback(active: string): SeedItem[] {
     { slug: "tasmiyah-elegant", category: "non-wedding", title: "Tasmiyah Elegant", description: "Gold calligraphy", is_premium: false, thumbnail_url: null },
     { slug: "tedak-siten-prameswari", category: "non-wedding", title: "Tedak Siten", description: "Jawa baby ritual elegant", is_premium: false, thumbnail_url: null },
     { slug: "engagement-eternel", category: "wedding", title: "Engagement Éternel", description: "Lamaran gold elegant", is_premium: false, thumbnail_url: null },
+    { slug: "eclat-noir", category: "wedding", title: "Éclat Noir", description: "Jet ink + foil", is_premium: true, is_new: true, thumbnail_url: null },
+    { slug: "vermeil", category: "wedding", title: "Vermeil", description: "Crimson velvet", is_premium: true, thumbnail_url: null },
+    { slug: "moire-sable", category: "wedding", title: "Moiré Sable", description: "Taupe moiré luxe", is_premium: false, thumbnail_url: null },
+    { slug: "orangerie", category: "wedding", title: "Orangerie", description: "Citrus garden", is_premium: true, thumbnail_url: null },
+    { slug: "pembayun-elegant", category: "adat", title: "Pembayun Elegant", description: "Putri solo halus", is_premium: true, is_new: true, thumbnail_url: null },
+    { slug: "sangkala", category: "adat", title: "Sangkala", description: "Bali prasi elegant", is_premium: true, thumbnail_url: null },
+    { slug: "animasi-celestine", category: "animasi", title: "Animasi Célestine", description: "Aurora shimmer", is_premium: true, is_new: true, thumbnail_url: null },
+    { slug: "walimatul-khitan-elite", category: "non-wedding", title: "Walimatul Khitan Elite", description: "Gold navy islami", is_premium: false, thumbnail_url: null },
+    { slug: "aqiqah-hana-prameswari", category: "non-wedding", title: "Aqiqah Hana", description: "Blush prameswari", is_premium: false, thumbnail_url: null },
+    { slug: "ultah-aria", category: "non-wedding", title: "Ultah Aria", description: "Kids confetti elegant", is_premium: false, thumbnail_url: null },
   ];
   return active === "all" ? all : all.filter((t) => t.category === active);
 }

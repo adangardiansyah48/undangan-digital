@@ -294,5 +294,15 @@ insert into public.templates (slug, category, subcategory, title, description, t
   ('birthday-elio', 'non-wedding', 'birthday', 'Birthday Elio', 'Minimal kids elegant', null, false, 37),
   ('tasmiyah-elegant', 'non-wedding', 'tasmiyah', 'Tasmiyah Elegant', 'Gold calligraphy', null, false, 38),
   ('tedak-siten-prameswari', 'non-wedding', 'tedak-siten', 'Tedak Siten', 'Jawa baby ritual elegant', null, false, 39),
-  ('engagement-eternel', 'wedding', null, 'Engagement Éternel', 'Lamaran gold elegant', null, false, 40)
+  ('engagement-eternel', 'wedding', null, 'Engagement Éternel', 'Lamaran gold elegant', null, false, 40),
+  ('eclat-noir', 'wedding', null, 'Éclat Noir', 'Jet ink + foil', null, true, 41),
+  ('vermeil', 'wedding', null, 'Vermeil', 'Crimson velvet', null, true, 42),
+  ('moire-sable', 'wedding', null, 'Moiré Sable', 'Taupe moiré luxe', null, false, 43),
+  ('orangerie', 'wedding', null, 'Orangerie', 'Citrus garden', null, true, 44),
+  ('pembayun-elegant', 'adat', 'pembayun', 'Pembayun Elegant', 'Putri solo halus', null, true, 45),
+  ('sangkala', 'adat', 'bali', 'Sangkala', 'Bali prasi elegant', null, true, 46),
+  ('animasi-celestine', 'animasi', null, 'Animasi Célestine', 'Aurora shimmer', null, true, 47),
+  ('walimatul-khitan-elite', 'non-wedding', 'khitan', 'Walimatul Khitan Elite', 'Gold navy islami', null, false, 48),
+  ('aqiqah-hana-prameswari', 'non-wedding', 'aqiqah', 'Aqiqah Hana', 'Blush prameswari', null, false, 49),
+  ('ultah-aria', 'non-wedding', 'birthday', 'Ultah Aria', 'Kids confetti elegant', null, false, 50)
 on conflict (slug) do nothing;
