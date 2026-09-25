@@ -106,6 +106,33 @@ export async function ensureFolder(userId: string, name: string, parentId?: stri
   return created.data.id!;
 }
 
+function rootFolderId() {
+  return process.env.GOOGLE_DRIVE_FOLDER_ID || undefined;
+}
+
+export async function ensureInvitationFolder(userId: string, slug: string) {
+  const root = rootFolderId();
+  if (!root) return ensureFolder(userId, `mstory-${slug}`);
+  return ensureFolder(userId, `mstory-${slug}`, root);
+}
+
+export async function trashFolder(folderId: string, userId: string) {
+  const drive = await getDrive(userId);
+  await drive.files.update({ fileId: folderId, requestBody: { trashed: true } }).catch(() => {});
+}
+
+export async function trashFilesByIds(fileIds: string[], userId: string) {
+  if (!fileIds.length) return;
+  const drive = await getDrive(userId);
+  for (const fid of fileIds) {
+    await drive.files.update({ fileId: fid, requestBody: { trashed: true } }).catch(() => {});
+  }
+}
+
+export async function deleteFilesByIds(fileIds: string[], ownerUserId: string) {
+  await trashFilesByIds(fileIds, ownerUserId);
+}
+
 export async function uploadBuffer(
   userId: string,
   file: { buffer: Buffer; filename: string; mimeType: string },

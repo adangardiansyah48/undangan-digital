@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { compressImage, extFromMime, isImage, validateUpload } from "@/lib/image";
-import { r2Key, r2PublicUrl, r2Put } from "@/lib/r2";
 
 const ALLOWED_URL = ["https://", "http://"];
 
@@ -28,7 +27,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     if (!url || !ALLOWED_URL.some((p) => url.startsWith(p))) return NextResponse.json({ error: "url tidak valid" }, { status: 400 });
     const { data: row, error } = await supabase
       .from("gallery_items")
-      .insert({ invitation_id: id, type: "photo", url, r2_key: null })
+      .insert({ invitation_id: id, type: "photo", url, r2_key: null, drive_file_id: null })
       .select("*")
       .single();
     if (error) return NextResponse.json({ error: error.message }, { status: 400 });
@@ -59,32 +58,30 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     ext = c.ext;
   }
 
-  const key = r2Key(id, ext, "gallery");
+  let driveFileId: string | null = null;
+  let url: string;
   try {
-    await r2Put(key, toUpload, mimeOut);
+    const { ensureInvitationFolder, uploadBuffer, driveDirectUrl } = await import("@/lib/gdrive");
+    const folderId = await ensureInvitationFolder(user.id, inv.slug);
+    const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const res = await uploadBuffer(user.id, { buffer: Buffer.from(toUpload), filename, mimeType: mimeOut }, folderId);
+    driveFileId = res.id ?? null;
+    url = driveFileId ? driveDirectUrl(driveFileId) : "";
+    if (!driveFileId) throw new Error("Gagal upload ke Google Drive");
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    const isR2Missing = msg.includes("INVITATION_R2") || msg.includes("R2");
-    if (isR2Missing) {
-      return NextResponse.json(
-        {
-          error:
-            "R2 belum aktif. Aktifkan R2 di Cloudflare Dashboard (Storage → R2 → Enable), buat bucket invora-invitations, lalu deploy ulang.",
-          hint: "Wrangler r2 bucket create invora-invitations + dashboard enable",
-        },
-        { status: 503 }
-      );
+    const isNotConnected = msg.includes("belum terhubung") || msg.includes("Token");
+    if (isNotConnected) {
+      return NextResponse.json({ error: "Google Drive belum terhubung. Hubungkan di Dashboard → Settings.", hint: "gdrive_not_connected" }, { status: 503 });
     }
     return NextResponse.json({ error: msg }, { status: 500 });
   }
 
-  const url = r2PublicUrl(key);
   const type = mimeOut.startsWith("video") ? "video" : "photo";
-
   const admin = createAdminClient();
   const { data: row, error } = await admin
     .from("gallery_items")
-    .insert({ invitation_id: id, type, url, r2_key: key, drive_file_id: null })
+    .insert({ invitation_id: id, type, url, r2_key: null, drive_file_id: driveFileId })
     .select("*")
     .single();
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
@@ -107,15 +104,15 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
   if (!inv || inv.user_id !== user.id) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const admin = createAdminClient();
-  const { data: item } = await admin.from("gallery_items").select("id,r2_key").eq("id", itemId).eq("invitation_id", id).maybeSingle();
+  const { data: item } = await admin.from("gallery_items").select("id,drive_file_id").eq("id", itemId).eq("invitation_id", id).maybeSingle();
   if (!item) return NextResponse.json({ error: "Item tidak ditemukan" }, { status: 404 });
 
   const { error } = await admin.from("gallery_items").delete().eq("id", itemId);
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
 
-  if (item.r2_key) {
-    const { r2Delete } = await import("@/lib/r2");
-    await r2Delete([item.r2_key]).catch(() => {});
+  if (item.drive_file_id) {
+    const { trashFilesByIds } = await import("@/lib/gdrive");
+    await trashFilesByIds([item.drive_file_id], user.id).catch(() => {});
   }
   return NextResponse.json({ ok: true });
 }

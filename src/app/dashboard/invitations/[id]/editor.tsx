@@ -430,10 +430,46 @@ export function InvitationEditor({
               <Button onClick={save} disabled={saving} variant="outline">
                 Simpan pengaturan
               </Button>
+              <div className="border-t border-border pt-4">
+                <DeleteInvitationPanel invitation={invitation} />
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Hapus undangan → galeri Drive folder <code>mstory-{invitation.slug}</code> di-trash, guests/wishes/analytics ikut terhapus permanen.
+                </p>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
+    </div>
+  );
+}
+
+function DeleteInvitationPanel({ invitation }: { invitation: Invitation }) {
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+  async function doDelete() {
+    if (!confirm(`Hapus undangan "${invitation.slug}" + semua tamu/wishes/foto Drive permanen?`)) return;
+    setBusy(true);
+    setMsg(null);
+    try {
+      const res = await fetch(`/api/invitations/${invitation.id}`, { method: "DELETE" });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error ?? "Gagal hapus");
+      setMsg(`Terhapus ${body.files ?? 0} file Drive di-trash. Redirect…`);
+      setTimeout(() => (window.location.href = "/dashboard"), 900);
+    } catch (e) {
+      setMsg(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-3">
+      <p className="text-sm font-medium text-destructive">Zona bahaya</p>
+      <Button variant="destructive" size="sm" className="mt-2" onClick={doDelete} disabled={busy}>
+        {busy ? "Menghapus…" : "Hapus undangan & foto Drive"}
+      </Button>
+      {msg && <p className="mt-2 text-sm text-muted-foreground">{msg}</p>}
     </div>
   );
 }
@@ -477,7 +513,7 @@ function GalleryPanel({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Galeri — R2 terkompres (webp ≤1920px, ~78q). Hapus otomatis H+3 permanen.</CardTitle>
+        <CardTitle className="text-base">Galeri — Drive folder <code>mstory-{invitationId.slice(0, 8)}</code> + webp ≤1920px. Hapus otomatis H+3 permanen.</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <Input type="file" accept="image/*,video/*" onChange={upload} disabled={uploading} />

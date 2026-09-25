@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { r2Delete, r2ListByInvitation } from "@/lib/r2";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -25,7 +24,7 @@ export async function GET(req: Request) {
 
   const { data: expired, error } = await supa
     .from("invitations")
-    .select("id,slug,expired_at,data")
+    .select("id,slug,user_id,expired_at,data")
     .not("expired_at", "is", null)
     .lt("expired_at", nowIso)
     .eq("status", "published")
@@ -34,21 +33,32 @@ export async function GET(req: Request) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   if (!expired?.length) return NextResponse.json({ ok: true, scanned: 0, cleaned: 0 });
 
-  let totalKeys = 0;
+  let totalFiles = 0;
   let totalInvs = 0;
 
   for (const inv of expired) {
-    const keysFromItems: string[] = [];
-    const { data: items } = await supa.from("gallery_items").select("id,r2_key,url").eq("invitation_id", inv.id);
-    for (const it of items ?? []) if (it.r2_key) keysFromItems.push(it.r2_key);
-
-    const bucketKeys = await r2ListByInvitation(inv.id).catch(() => []);
-    const allKeys = [...new Set([...keysFromItems, ...bucketKeys])];
-    totalKeys += allKeys.length;
+    const { data: items } = await supa.from("gallery_items").select("id,drive_file_id,r2_key").eq("invitation_id", inv.id);
+    const driveIds = (items ?? []).map((x) => x.drive_file_id).filter(Boolean) as string[];
+    const r2Keys = (items ?? []).map((x) => (x as unknown as { r2_key?: string | null }).r2_key).filter(Boolean) as string[];
+    totalFiles += driveIds.length + r2Keys.length;
 
     if (dry) continue;
 
-    if (allKeys.length) await r2Delete(allKeys).catch(() => {});
+    if (driveIds.length) {
+      try {
+        const mod = await import("@/lib/gdrive");
+        await mod.trashFilesByIds(driveIds, inv.user_id).catch(() => {});
+        const folderId = await mod.ensureInvitationFolder(inv.user_id, inv.slug).catch(() => null);
+        if (folderId) await mod.trashFolder(folderId, inv.user_id).catch(() => {});
+      } catch {}
+    }
+    if (r2Keys.length) {
+      try {
+        const { r2Delete } = await import("@/lib/r2");
+        await r2Delete(r2Keys).catch(() => {});
+      } catch {}
+    }
+
     await supa.from("gallery_items").delete().eq("invitation_id", inv.id);
     await supa.from("analytics").delete().eq("invitation_id", inv.id);
     await supa.from("guests").delete().eq("invitation_id", inv.id);
@@ -57,7 +67,7 @@ export async function GET(req: Request) {
     totalInvs++;
   }
 
-  return NextResponse.json({ ok: true, scanned: expired.length, keys: totalKeys, cleaned: totalInvs, dry });
+  return NextResponse.json({ ok: true, scanned: expired.length, files: totalFiles, cleaned: totalInvs, dry });
 }
 
 export async function POST(req: Request) {
