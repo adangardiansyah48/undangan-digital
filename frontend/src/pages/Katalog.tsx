@@ -18,7 +18,7 @@ export default function Katalog() {
         {items.map(t=> <div key={t.slug} style={{border:"1px solid #ddd",borderRadius:12,padding:16}}>
           <strong>{t.title}</strong> <small>{t.category} {t.is_premium?"· Premium":""}</small>
           <p style={{opacity:0.7}}>{t.description}</p>
-          <Link to={`/preview/${t.slug}`}>Preview</Link> {" · "} <Link to={`/dashboard/new?template=${t.slug}`}>Pakai</Link>
+          <Link to={`/preview/${t.slug}`}>Preview</Link> {" · "} <Link to={`/dashboard/new?template=${t.slug}&track=self`}>Self (isi sendiri)</Link> {" · "} <Link to={`/dashboard/new?template=${t.slug}&track=assisted`}>Assisted (admin)</Link>
         </div>)}
       </div>
       {!items.length && <p>Memuat… atau backend belum jalan.</p>}

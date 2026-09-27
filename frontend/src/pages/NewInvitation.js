@@ -5,11 +5,12 @@ import { api } from "../lib/api";
 export default function NewInvitation() {
     const [sp] = useSearchParams();
     const preset = sp.get("template") ?? undefined;
+    const presetTrack = sp.get("track");
     const nav = useNavigate();
     const [title, setTitle] = useState("");
     const [slug, setSlug] = useState("");
     const [tier, setTier] = useState("bronze");
-    const [track, setTrack] = useState("self");
+    const [track, setTrack] = useState(presetTrack ?? "self");
     const [brief, setBrief] = useState("");
     const [err, setErr] = useState(null);
     async function submit(e) { e.preventDefault(); setErr(null); try {

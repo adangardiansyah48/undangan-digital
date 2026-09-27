@@ -9,6 +9,7 @@ import NewInvitation from "./pages/NewInvitation";
 import Editor from "./pages/Editor";
 import PublicInvitation from "./pages/PublicInvitation";
 import Settings from "./pages/Settings";
+import ContohDesain from "./pages/ContohDesain";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -23,6 +24,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/dashboard/invitations/:id" element={<Editor />} />
         <Route path="/dashboard/settings" element={<Settings />} />
         <Route path="/preview/:slug" element={<PublicInvitation preview />} />
+        <Route path="/example" element={<ContohDesain />} />
         <Route path="/:slug" element={<PublicInvitation />} />
       </Routes>
     </BrowserRouter>
