@@ -4,7 +4,10 @@ export default function Landing() {
     <div style={{ fontFamily: "Outfit,system-ui,sans-serif", color: "#14141a", background: "#fff", minHeight: "100svh" }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Outfit:wght@400;600&display=swap');`}</style>
       <header style={{ maxWidth: 1200, margin: "0 auto", padding: "14px 20px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #eee" }}>
-        <b style={{ fontFamily: "Outfit,sans-serif", fontSize: 20, letterSpacing: "-.02em" }}>mstory<span style={{ color: "#888", fontWeight: 400 }}>.id</span> <span style={{ fontSize: 10, background: "#111", color: "#fff", borderRadius: 999, padding: "3px 8px", verticalAlign: "middle", letterSpacing: ".12em" }}>ELEGANT</span></b>
+        <Link to="/" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <img src="/logo.svg" alt="mstory.id" style={{ height: 28, width: "auto" }} />
+          <span style={{ fontSize: 10, background: "#111", color: "#fff", borderRadius: 999, padding: "3px 8px", verticalAlign: "middle", letterSpacing: ".12em" }}>ELEGANT</span>
+        </Link>
         <nav style={{ display: "flex", gap: 18, fontSize: 14, alignItems: "center" }}>
           <Link to="/katalog" style={{ color: "#14141a", textDecoration: "none", fontWeight: 500 }}>Katalog</Link>
           <Link to="/dashboard" style={{ color: "#666", textDecoration: "none" }}>Dashboard</Link>
