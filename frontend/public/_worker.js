@@ -7,7 +7,11 @@ export default {
     const accept = request.headers.get("accept") || "";
     const isApi = url.pathname.startsWith("/api/");
     const isAssetExt = /\.(js|css|png|jpg|jpeg|gif|svg|webp|woff2?|ttf|ico|json|map)$/i.test(url.pathname);
-    if (!isApi && !isAssetExt && (accept.includes("text/html") || url.pathname === "/" || url.pathname.startsWith("/example") || url.pathname.startsWith("/katalog") || url.pathname.startsWith("/dashboard") || url.pathname.startsWith("/preview"))) {
+    if (!isApi && !isAssetExt && (accept.includes("text/html") || url.pathname === "/" || url.pathname === "/login" || url.pathname === "/register" || url.pathname === "/admin" || url.pathname === "/pesan" || url.pathname.startsWith("/example") || url.pathname.startsWith("/katalog") || url.pathname.startsWith("/dashboard") || url.pathname.startsWith("/preview"))) {
+      const htmlReq = new Request(new URL("/index.html", request.url), { headers: request.headers });
+      return env.ASSETS.fetch(htmlReq);
+    }
+    if (!isApi && !isAssetExt) {
       const htmlReq = new Request(new URL("/index.html", request.url), { headers: request.headers });
       return env.ASSETS.fetch(htmlReq);
     }
