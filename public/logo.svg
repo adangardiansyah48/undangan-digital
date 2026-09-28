@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 120" width="420" height="120" role="img" aria-label="mstory.id">
+<title>mstory.id</title>
+<g fill="#111" stroke="none">
+<!-- bird / stork silhouette approximating the reference image -->
+<path d="M165 58 C 152 52, 138 36, 128 18 C 126 13, 127 10, 132 14 C 142 24, 150 36, 158 48 C 162 44, 168 38, 175 33 C 186 24, 197 18, 205 16 C 207 15, 209 14, 211 16 C 206 18, 198 23, 189 30 C 179 38, 168 48, 162 56 C 170 50, 181 42, 196 36 C 207 32, 216 30, 223 30 C 215 33, 203 37, 190 43 C 176 50, 164 59, 158 66 C 156 68, 154 69, 152 68 C 150 67, 151 64, 153 62 C 147 62, 138 62, 132 66 C 140 62, 146 58, 153 57 C 154 54, 156 51, 159 47 C 146 52, 131 61, 122 70 C 119 73, 118 78, 121 78 C 124 78, 126 75, 130 70 C 138 60, 152 49, 165 58 Z M222 30 C 240 30, 256 25, 268 22 C 272 21, 274 21, 277 22 C 273 23, 267 25, 261 27 C 252 30, 240 34, 230 38 C 226 39, 224 39, 222 38 C 218 33, 220 31, 222 30 Z"/>
+<!-- beak detail -->
+<path d="M267 22 C 278 19, 286 17, 292 16 C 291 17, 286 19, 278 22 L 267 22 Z"/>
+</g>
+<text x="0" y="98" font-family="'Inter','Poppins','Montserrat',system-ui,sans-serif" font-size="54" font-weight="400" letter-spacing="-0.03em" fill="#111">mstory<tspan font-weight="400" fill="#111">.id</tspan></text>
+</svg>

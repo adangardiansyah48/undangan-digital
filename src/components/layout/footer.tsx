@@ -6,7 +6,8 @@ export function Footer() {
     <footer className="border-t bg-white">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:px-8 py-10 md:grid-cols-[1.4fr_0.8fr_0.8fr]">
         <div>
-          <p className="font-serif text-lg font-bold">mstory<span className="font-normal text-muted-foreground">.id</span></p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.svg" alt="mstory.id" className="h-8 w-auto" />
           <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">Jasa pembuatan undangan digital. Bikin sendiri via editor atau order dibantu tim. Fresh, elegan, gampang untuk awam.</p>
           <p className="mt-4 text-xs text-muted-foreground">Butuh bantuan? <a href={waLink("Halo mstory, butuh bantuan undangan digital")} target="_blank" rel="noreferrer" className="font-medium text-foreground underline">Chat WA</a></p>
         </div>

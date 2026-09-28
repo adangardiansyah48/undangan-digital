@@ -17,8 +17,9 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b bg-white/90 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="font-serif text-xl font-bold tracking-tight">mstory<span className="font-normal text-muted-foreground">.id</span></span>
+        <Link href="/" className="flex items-center gap-2.5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.svg" alt="mstory.id" className="h-8 w-auto object-contain" />
           <span className="hidden rounded-full bg-foreground px-2.5 py-0.5 text-[10px] font-medium tracking-widest text-background sm:inline">ELEGANT</span>
         </Link>
         <nav className="hidden items-center gap-8 md:flex">

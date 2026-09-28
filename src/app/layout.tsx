@@ -19,6 +19,10 @@ export const metadata: Metadata = {
   },
   description:
     "Bikin undangan digital sendiri, atau dibuatkan tim. Template elegan, custom nama tamu, RSVP, amplop digital.",
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
