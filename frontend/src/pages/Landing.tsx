@@ -5,7 +5,7 @@ export default function Landing() {
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Outfit:wght@400;600&display=swap');`}</style>
       <header style={{ maxWidth: 1200, margin: "0 auto", padding: "14px 20px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #eee" }}>
         <Link to="/" style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <img src="/logo.svg" alt="mstory.id" style={{ height: 28, width: "auto" }} />
+          <img src="/logo.svg" alt="mstory.id" style={{ height: 44, width: "auto" }} />
           <span style={{ fontSize: 10, background: "#111", color: "#fff", borderRadius: 999, padding: "3px 8px", verticalAlign: "middle", letterSpacing: ".12em" }}>ELEGANT</span>
         </Link>
         <nav style={{ display: "flex", gap: 18, fontSize: 14, alignItems: "center" }}>
