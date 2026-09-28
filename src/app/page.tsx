@@ -4,7 +4,6 @@ import { Hero } from "@/components/landing/hero";
 import { Features } from "@/components/landing/features";
 import { Hybrid } from "@/components/landing/hybrid";
 import { HowTo } from "@/components/landing/how-to";
-import { Pricing } from "@/components/landing/pricing";
 
 export default function Home() {
   return (
@@ -15,7 +14,6 @@ export default function Home() {
         <Hybrid />
         <Features />
         <HowTo />
-        <Pricing />
       </main>
       <Footer />
     </>

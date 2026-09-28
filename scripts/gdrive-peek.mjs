@@ -1,0 +1,10 @@
+import { google } from "googleapis";
+const o=new google.auth.OAuth2(process.env.GOOGLE_CLIENT_ID,process.env.GOOGLE_CLIENT_SECRET,process.env.GOOGLE_REDIRECT_URI);
+o.setCredentials({refresh_token:process.env.GOOGLE_OAUTH_REFRESH_TOKEN});
+const d=google.drive({version:'v3',auth:o});
+const root=process.env.GOOGLE_DRIVE_FOLDER_ID;
+const a=await d.files.list({q:`'${root}' in parents and trashed=false`,fields:'files(id,name)',pageSize:5});
+const first=a.data.files[0];
+console.log('folder', first.name, first.id);
+const b=await d.files.list({q:`'${first.id}' in parents and trashed=false`,fields:'files(id,name,mimeType)',pageSize:6});
+console.log(b.data.files);

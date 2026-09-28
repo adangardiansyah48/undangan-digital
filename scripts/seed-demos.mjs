@@ -221,7 +221,7 @@ async function main() {
       }
       const { data: has } = await supa.from("gallery_items").select("id").eq("invitation_id", invId).eq("url", finalUrl).maybeSingle();
       if (!has) {
-        await supa.from("gallery_items").insert({ invitation_id: invId, type: "photo", url: finalUrl, r2_key: null, drive_file_id: driveFileId, sort_order: i });
+        await supa.from("gallery_items").insert({ invitation_id: invId, type: "photo", url: finalUrl, drive_file_id: driveFileId, sort_order: i });
       }
     }
 

@@ -12,7 +12,7 @@ export default async function DashboardPage() {
   const { data: invitations } = user
     ? await supabase
         .from("invitations")
-        .select("id,slug,title,tier,status,expired_at,view_count")
+        .select("id,slug,title,status,expired_at,view_count")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(10)
@@ -82,7 +82,7 @@ export default async function DashboardPage() {
               >
                 <span className="font-medium">/{inv.slug}</span>
                 <span className="text-sm text-muted-foreground">
-                  {inv.tier} · {inv.status} · views {inv.view_count}
+                  {inv.status} · views {inv.view_count}
                 </span>
               </Link>
             ))

@@ -1,6 +1,6 @@
-export const R2_MAX_BYTES = 8 * 1024 * 1024;
-export const R2_ALLOWED_IMAGE = ["image/jpeg", "image/png", "image/webp", "image/avif", "image/heic", "image/heif"];
-export const R2_ALLOWED_VIDEO = ["video/mp4", "video/webm", "video/quicktime"];
+export const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
+export const ALLOWED_IMAGE = ["image/jpeg", "image/png", "image/webp", "image/avif", "image/heic", "image/heif"];
+export const ALLOWED_VIDEO = ["video/mp4", "video/webm", "video/quicktime"];
 
 export function extFromMime(mime: string) {
   const m: Record<string, string> = {
@@ -63,9 +63,9 @@ async function fallbackResize(buf: Buffer, mime: string) {
 }
 
 export function validateUpload(file: { size: number; type: string; name: string }) {
-  const allowed = [...R2_ALLOWED_IMAGE, ...R2_ALLOWED_VIDEO];
+  const allowed = [...ALLOWED_IMAGE, ...ALLOWED_VIDEO];
   if (!allowed.includes(file.type) && !file.type.startsWith("image/") && !file.type.startsWith("video/")) {
     throw new Error(`Tipe file tidak didukung: ${file.type}`);
   }
-  if (file.size > R2_MAX_BYTES) throw new Error(`File terlalu besar, maks ${R2_MAX_BYTES / 1024 / 1024}MB`);
+  if (file.size > MAX_UPLOAD_BYTES) throw new Error(`File terlalu besar, maks ${MAX_UPLOAD_BYTES / 1024 / 1024}MB`);
 }

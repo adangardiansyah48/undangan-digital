@@ -1,7 +1,7 @@
 export type UserRole = "customer" | "designer" | "admin" | "superadmin";
 export type InvitationStatus = "draft" | "published" | "archived";
 export type Track = "self" | "assisted";
-export type Tier = "bronze" | "silver" | "gold" | "platinum";
+export type Tier = string;
 export type TemplateCategory = "wedding" | "adat" | "animasi" | "non-wedding";
 export type RsvpStatus = "pending" | "hadir" | "tidak" | "ragu";
 export type PaymentStatus = "pending" | "paid" | "failed" | "refunded";
@@ -156,7 +156,6 @@ export type GalleryItem = {
   invitation_id: string;
   type: "photo" | "video";
   url: string;
-  r2_key: string | null;
   drive_file_id: string | null;
   caption: string | null;
   sort_order: number;

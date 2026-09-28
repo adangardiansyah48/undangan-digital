@@ -16,17 +16,15 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { slugify } from "@/lib/constants";
-import type { Tier, Track } from "@/types/database";
+import type { Track } from "@/types/database";
 
 export default function NewInvitationPage() {
   const router = useRouter();
   const params = useSearchParams();
   const presetTemplate = params.get("template") ?? undefined;
-  const presetTier = (params.get("tier") as Tier | null) ?? "bronze";
 
   const [slug, setSlug] = useState("");
   const [title, setTitle] = useState("");
-  const [tier, setTier] = useState<Tier>(presetTier);
   const [track, setTrack] = useState<Track>("self");
   const [brief, setBrief] = useState("");
   const [loading, setLoading] = useState(false);
@@ -53,8 +51,6 @@ export default function NewInvitationPage() {
         if (demo?.data && typeof demo.data === "object") cloneData = demo.data as Record<string, unknown>;
       }
 
-      const expiredAt = tier === "platinum" ? null : tierExpiry(tier);
-
       const { data: invitation, error: invErr } = await supabase
         .from("invitations")
         .insert({
@@ -63,8 +59,7 @@ export default function NewInvitationPage() {
           slug: slugValue,
           title: title || slugValue,
           track,
-          tier,
-          expired_at: expiredAt,
+          expired_at: null,
           data: cloneData,
           status: "draft",
         })
@@ -79,8 +74,6 @@ export default function NewInvitationPage() {
           .insert({
             user_id: user.id,
             invitation_id: invitation.id,
-            tier,
-            amount: tierAmount(tier),
             track: "assisted",
             payment_status: "pending",
           })
@@ -150,33 +143,17 @@ export default function NewInvitationPage() {
               </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-1.5">
-                <Label>Paket</Label>
-                <Select value={tier} onValueChange={(v) => setTier(v as Tier)}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="bronze">Bronze (gratis, 2 hari)</SelectItem>
-                    <SelectItem value="silver">Silver (10 hari)</SelectItem>
-                    <SelectItem value="gold">Gold (30 hari)</SelectItem>
-                    <SelectItem value="platinum">Platinum (selamanya)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-1.5">
-                <Label>Jalur</Label>
-                <Select value={track} onValueChange={(v) => setTrack(v as Track)}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="self">Saya edit sendiri</SelectItem>
-                    <SelectItem value="assisted">Dibuatkan tim</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="space-y-1.5">
+              <Label>Jalur</Label>
+              <Select value={track} onValueChange={(v) => setTrack(v as Track)}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="self">Saya edit sendiri</SelectItem>
+                  <SelectItem value="assisted">Dibuatkan tim</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {track === "assisted" && (
@@ -208,25 +185,4 @@ export default function NewInvitationPage() {
   );
 }
 
-function tierAmount(tier: Tier): number {
-  const map: Record<Tier, number> = {
-    bronze: 0,
-    silver: 35000,
-    gold: 65000,
-    platinum: 97000,
-  };
-  return map[tier];
-}
 
-function tierExpiry(tier: Tier): string {
-  const days: Record<Tier, number> = {
-    bronze: 2,
-    silver: 10,
-    gold: 30,
-    platinum: 0,
-  };
-  const d = days[tier];
-  const at = new Date();
-  at.setDate(at.getDate() + d);
-  return at.toISOString();
-}

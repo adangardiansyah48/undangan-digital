@@ -2,18 +2,16 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { DEFAULT_DATA, mergeData } from "../lib/invitation";
+import { gdriveThumb } from "../lib/invitation";
 const SLIDES = [
-    "/demo41/cover.jpg",
-    "/demo41/g2.jpg",
-    "/demo41/g3.jpg",
-    "/demo41/g4.jpg",
-    "/demo41/g8.jpg",
-    "/demo41/g10.jpg",
-    "/demo41/g11.jpg",
-    "/demo41/g12.jpg",
+    gdriveThumb("1fTr-jc5mmiCQCTHsHA2uR2cVvBrDVoZG", 800),
+    gdriveThumb("1jsz_qKW3OmMLmkOPoCqpzJiDRfin7hH4", 800),
+    gdriveThumb("1R51_kWb6mVhPA3UHi-8d3uI1jHvxWcZo", 800),
+    gdriveThumb("1FO8XvvfFL9AQD7rqY3VAwrac9OYycx9q", 800),
+    gdriveThumb("1eDPVnIiF-OnDqT1h48jri21acxczPJKM", 800),
 ];
-const BRIDE = "/demo41/bride.jpg";
-const GROOM = "/demo41/groom.jpg";
+const BRIDE = gdriveThumb("1fTr-jc5mmiCQCTHsHA2uR2cVvBrDVoZG", 400);
+const GROOM = gdriveThumb("1jsz_qKW3OmMLmkOPoCqpzJiDRfin7hH4", 400);
 function useReveal(once = true) {
     const ref = useRef(null);
     const [on, setOn] = useState(false);

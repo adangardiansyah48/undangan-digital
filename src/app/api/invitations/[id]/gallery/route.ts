@@ -27,7 +27,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     if (!url || !ALLOWED_URL.some((p) => url.startsWith(p))) return NextResponse.json({ error: "url tidak valid" }, { status: 400 });
     const { data: row, error } = await supabase
       .from("gallery_items")
-      .insert({ invitation_id: id, type: "photo", url, r2_key: null, drive_file_id: null })
+      .insert({ invitation_id: id, type: "photo", url, drive_file_id: null })
       .select("*")
       .single();
     if (error) return NextResponse.json({ error: error.message }, { status: 400 });
@@ -81,7 +81,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   const admin = createAdminClient();
   const { data: row, error } = await admin
     .from("gallery_items")
-    .insert({ invitation_id: id, type, url, r2_key: null, drive_file_id: driveFileId })
+    .insert({ invitation_id: id, type, url, drive_file_id: driveFileId })
     .select("*")
     .single();
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });

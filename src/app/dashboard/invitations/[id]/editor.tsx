@@ -76,7 +76,7 @@ export function InvitationEditor({
               {publicUrl}?to=NamaTamu
             </Link>
             {" · "}
-            {invitation.tier} · {invitation.status}
+            {invitation.status}
           </p>
         </div>
         <div className="flex gap-2">
@@ -95,7 +95,7 @@ export function InvitationEditor({
         <TabsList className="flex w-full flex-wrap">
           <TabsTrigger value="mempelai">Mempelai</TabsTrigger>
           <TabsTrigger value="acara">Acara</TabsTrigger>
-          <TabsTrigger value="galeri">Galeri (R2)</TabsTrigger>
+          <TabsTrigger value="galeri">Galeri</TabsTrigger>
           <TabsTrigger value="tamu">Tamu</TabsTrigger>
           <TabsTrigger value="amplop">Amplop</TabsTrigger>
           <TabsTrigger value="pengaturan">Pengaturan</TabsTrigger>
@@ -501,7 +501,7 @@ function GalleryPanel({
       const body = await res.json();
       if (!res.ok) throw new Error(body.error ?? "Gagal upload");
       onChanged([body.item, ...items]);
-      setMsg(`Upload R2 OK (${body.mime ?? "image"} ${(body.compressed ? Math.round(body.compressed / 1024) + "KB" : "")})`.trim());
+      setMsg(`Upload OK (${body.mime ?? "image"} ${(body.compressed ? Math.round(body.compressed / 1024) + "KB" : "")})`.trim());
     } catch (err) {
       setMsg(err instanceof Error ? err.message : String(err));
     } finally {

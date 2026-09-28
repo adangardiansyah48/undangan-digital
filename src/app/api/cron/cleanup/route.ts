@@ -37,10 +37,9 @@ export async function GET(req: Request) {
   let totalInvs = 0;
 
   for (const inv of expired) {
-    const { data: items } = await supa.from("gallery_items").select("id,drive_file_id,r2_key").eq("invitation_id", inv.id);
+    const { data: items } = await supa.from("gallery_items").select("id,drive_file_id").eq("invitation_id", inv.id);
     const driveIds = (items ?? []).map((x) => x.drive_file_id).filter(Boolean) as string[];
-    const r2Keys = (items ?? []).map((x) => (x as unknown as { r2_key?: string | null }).r2_key).filter(Boolean) as string[];
-    totalFiles += driveIds.length + r2Keys.length;
+    totalFiles += driveIds.length;
 
     if (dry) continue;
 
@@ -50,12 +49,6 @@ export async function GET(req: Request) {
         await mod.trashFilesByIds(driveIds, inv.user_id).catch(() => {});
         const folderId = await mod.ensureInvitationFolder(inv.user_id, inv.slug).catch(() => null);
         if (folderId) await mod.trashFolder(folderId, inv.user_id).catch(() => {});
-      } catch {}
-    }
-    if (r2Keys.length) {
-      try {
-        const { r2Delete } = await import("@/lib/r2");
-        await r2Delete(r2Keys).catch(() => {});
       } catch {}
     }
 

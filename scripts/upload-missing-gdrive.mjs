@@ -35,7 +35,7 @@ for(const slug of MISSING){
   for(let i=0;i<4;i++){
     const url=await uploadImageUrl(SEEDS[i%SEEDS.length]+`?t=${Date.now()}-${i}`, `${slug}-${i+1}.jpg`, folderId);
     const {data:has}=await supa.from("gallery_items").select("id").eq("invitation_id",inv.id).eq("url",url).maybeSingle();
-    if(!has) await supa.from("gallery_items").insert({invitation_id:inv.id, type:"photo", url, r2_key:null, drive_file_id:url.match(/id=([^&]+)/)?.[1], sort_order:i});
+    if(!has) await supa.from("gallery_items").insert({invitation_id:inv.id, type:"photo", url, drive_file_id:url.match(/id=([^&]+)/)?.[1], sort_order:i});
     console.log(" ", i+1, "ok");
   }
 }

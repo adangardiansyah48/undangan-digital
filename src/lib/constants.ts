@@ -1,25 +1,7 @@
-import type { TemplateCategory, Tier } from "@/types/database";
+import type { TemplateCategory } from "@/types/database";
 
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "mstory.id";
 export const WA_NUMBER = process.env.NEXT_PUBLIC_WA_NUMBER ?? "6281234567890";
-
-export const TIERS: Record<
-  Tier,
-  { label: string; price: number; days: number | null; highlight?: boolean }
-> = {
-  bronze: { label: "Bronze", price: 0, days: 2 },
-  silver: { label: "Silver", price: 35000, days: 10 },
-  gold: { label: "Gold", price: 65000, days: 30, highlight: true },
-  platinum: { label: "Platinum", price: 97000, days: null },
-};
-
-export const TIER_FEATURES = [
-  "Semua fitur undangan",
-  "Jumlah tamu tidak terbatas",
-  "Amplop digital",
-  "Custom nama tamu",
-  "RSVP & buku tamu",
-];
 
 export const CATEGORIES: { id: TemplateCategory | "all"; label: string }[] = [
   { id: "all", label: "Semua" },
@@ -83,18 +65,11 @@ export const FEATURES = [
 export const STEPS = [
   { n: "01", title: "Pilih tema", desc: "Wedding, adat, animasi, atau acara lain." },
   { n: "02", title: "Pilih jalur", desc: "Edit sendiri, atau minta tim kerjakan." },
-  { n: "03", title: "Bayar & aktifkan", desc: "Paket 2 hari sampai selamanya." },
+  { n: "03", title: "Hubungi WA", desc: "Chat WA untuk info harga & aktivasi." },
   { n: "04", title: "Sebar link", desc: "Kirim ?to=Nama ke tiap tamu via WA." },
 ];
 
-export function formatIDR(n: number) {
-  if (n === 0) return "GRATIS";
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    maximumFractionDigits: 0,
-  }).format(n);
-}
+
 
 export function waLink(text: string) {
   return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;

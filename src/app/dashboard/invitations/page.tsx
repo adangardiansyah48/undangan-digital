@@ -12,7 +12,7 @@ export default async function InvitationsPage() {
   const { data } = user
     ? await supabase
         .from("invitations")
-        .select("id,slug,title,tier,status,expired_at,view_count,created_at")
+        .select("id,slug,title,status,expired_at,view_count,created_at")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
     : { data: null };
@@ -45,7 +45,7 @@ export default async function InvitationsPage() {
                     {inv.title ?? inv.slug} · /{inv.slug}
                   </Link>
                   <p className="text-sm text-muted-foreground">
-                    {inv.status} · {inv.tier} · view {inv.view_count}
+                    {inv.status} · view {inv.view_count}
                     {inv.expired_at ? ` · expired ${new Date(inv.expired_at).toLocaleDateString("id-ID")}` : ""}
                   </p>
                 </div>
