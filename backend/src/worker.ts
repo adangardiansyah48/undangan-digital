@@ -53,6 +53,36 @@ function tierDays(t: string) { const m: Record<string, number> = { bronze: 2, si
 app.get("/health", (c) => c.json({ ok: true, version: "cf-0.1.0" }));
 app.get("/api/health", (c) => c.json({ ok: true, version: "cf-0.1.0" }));
 
+app.get("/api/site-settings", async (c) => {
+  const { data } = await sbAnon(c.env).from("site_settings").select("value").eq("id", "logo_url").maybeSingle();
+  return c.json({ logo_url: data?.value ?? "/logo.svg" });
+});
+app.post("/api/site-settings/logo", async (c) => {
+  const u = await getUser(c as never);
+  if (!u) return c.json({ error: "auth required" }, 401);
+  const { data: prof } = await sbAdmin(c.env).from("profiles").select("role").eq("id", u.id).single();
+  if (!prof || !["admin","superadmin"].includes(prof.role)) return c.json({ error: "forbidden" }, 403);
+  const form = await c.req.formData().catch(() => null);
+  const file = form?.get("file") as File | null;
+  if (!file || file.size === 0) return c.json({ error: "file required" }, 400);
+  if (file.size > 5 * 1024 * 1024) return c.json({ error: "max 5MB" }, 400);
+  const buf = Buffer.from(await file.arrayBuffer());
+  let url = `memory:${file.name}`;
+  if (c.env.GOOGLE_OAUTH_REFRESH_TOKEN) {
+    try {
+      const root = c.env.GOOGLE_DRIVE_FOLDER_ID || undefined;
+      const folder = await driveGlobalEnsureFolder(c.env, "site-assets", root);
+      const up = await driveGlobalUpload(c.env, { buffer: buf, filename: `logo-${Date.now()}-${file.name}`, mimeType: file.type || "image/png" }, folder);
+      if (up.id) url = `https://drive.google.com/uc?export=view&id=${up.id}`;
+    } catch {}
+  }
+  if (url.startsWith("memory:")) {
+    return c.json({ error: "upload GDrive fail, set GOOGLE_OAUTH_REFRESH_TOKEN" }, 500);
+  }
+  await sbAdmin(c.env).from("site_settings").upsert({ id: "logo_url", value: url }, { onConflict: "id" });
+  return c.json({ ok: true, url });
+});
+
 app.get("/api/templates", async (c) => {
   const cat = c.req.query("cat") ?? "all";
   let q = sbAnon(c.env).from("templates").select("*").eq("is_active", true).order("sort_order");

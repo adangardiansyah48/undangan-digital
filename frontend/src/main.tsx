@@ -12,6 +12,13 @@ import Settings from "./pages/Settings";
 import ContohDesain from "./pages/ContohDesain";
 import Order from "./pages/Order";
 import Admin from "./pages/Admin";
+import { getLogoUrl } from "./lib/site";
+getLogoUrl().then((u) => {
+  let l = document.querySelector('link[rel="icon"]') as HTMLLinkElement | null;
+  if (l) l.href = u;
+  let a = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement | null;
+  if (a) a.href = u;
+}).catch(() => {});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { API } from "../lib/api";
 import { CATALOG, thumbFor, type Cat } from "../lib/catalog";
+import { useSiteLogo } from "../lib/site";
 const CATS: { id: Cat; label: string }[] = [
   { id: "all", label: "Semua" },
   { id: "wedding", label: "Wedding" },
@@ -10,6 +11,7 @@ const CATS: { id: Cat; label: string }[] = [
   { id: "non-wedding", label: "Non Wedding" },
 ];
 export default function Landing() {
+  const logo = useSiteLogo();
   const [sp] = useSearchParams();
   const cat = (sp.get("cat") as Cat) ?? "all";
   const [q, setQ] = useState("");
@@ -26,7 +28,7 @@ export default function Landing() {
       <header style={{ position: "sticky", top: 0, zIndex: 20, background: "rgba(255,255,255,.9)", backdropFilter: "blur(10px)", borderBottom: "1px solid #eee" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
           <Link to="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-            <img src="/logo.svg" alt="mstory.id" style={{ height: 36, width: "auto" }} />
+            <img src={logo} alt="mstory.id" style={{ height: 36, width: "auto" }} />
             <span style={{ fontSize: 9, background: "#111", color: "#fff", borderRadius: 999, padding: "4px 8px", letterSpacing: ".12em", fontWeight: 600 }}>KATALOG 60</span>
           </Link>
           <nav style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>

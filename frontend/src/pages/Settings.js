@@ -1,15 +1,19 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { supabase, authHeader } from "../lib/supabase";
 import { API } from "../lib/api";
+import { AdminLayout } from "../components/AdminLayout";
 export default function Settings() {
-    const nav = useNavigate();
     const [email, setEmail] = useState(null);
     const [connected, setConnected] = useState(null);
     const [msg, setMsg] = useState(null);
+    const [logoUrl, setLogoUrl] = useState("/logo.svg");
+    const [logoMsg, setLogoMsg] = useState(null);
+    const [uploading, setUploading] = useState(false);
     useEffect(() => {
         supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
+        supabase.from("site_settings").select("value").eq("id", "logo_url").maybeSingle().then(({ data }) => { if (data?.value)
+            setLogoUrl(data.value); });
         (async () => { const h = await authHeader(); try {
             const r = await fetch(`${API}/api/auth/gdrive/status`, { headers: h });
             const d = await r.json();
@@ -24,6 +28,29 @@ export default function Settings() {
     else
         setMsg(d.error); }
     async function disconnect() { const h = await authHeader(); await fetch(`${API}/api/auth/gdrive`, { method: "DELETE", headers: h }); setConnected(false); }
-    async function logout() { await supabase.auth.signOut(); nav("/login"); }
-    return (_jsxs("div", { style: { minHeight: "100svh", background: "#f8f7f4", fontFamily: "Outfit,system-ui,sans-serif" }, children: [_jsx("style", { children: `@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Outfit:wght@400;500;600&display=swap');` }), _jsx("header", { style: { position: "sticky", top: 0, background: "rgba(255,255,255,.9)", backdropFilter: "blur(10px)", borderBottom: "1px solid #ebe8e3" }, children: _jsxs("div", { style: { maxWidth: 1100, margin: "0 auto", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }, children: [_jsxs(Link, { to: "/", style: { display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }, children: [_jsx("img", { src: "/logo.svg", alt: "mstory.id", style: { height: 34, width: "auto" } }), _jsx("span", { style: { fontSize: 10, background: "#1c3147", color: "#fff", borderRadius: 999, padding: "4px 8px", letterSpacing: ".12em", fontWeight: 600 }, children: "ADMIN" })] }), _jsxs("nav", { style: { display: "flex", gap: 8, alignItems: "center" }, children: [_jsx(Link, { to: "/admin", style: { fontSize: 13, color: "#6b7280", textDecoration: "none" }, children: "Pesanan" }), _jsx(Link, { to: "/dashboard", style: { fontSize: 13, color: "#6b7280", textDecoration: "none" }, children: "Dashboard" }), _jsx("button", { onClick: logout, style: { fontSize: 12, padding: "7px 10px", borderRadius: 999, border: "1px solid #ddd", background: "#fff", cursor: "pointer" }, children: "Keluar" })] })] }) }), _jsx("main", { style: { maxWidth: 560, margin: "0 auto", padding: "20px 16px 40px" }, children: _jsxs("div", { style: { background: "#fff", border: "1px solid #ebe8e3", borderRadius: 16, padding: 18 }, children: [_jsx("p", { style: { fontSize: 11, letterSpacing: ".18em", color: "#c4a574", margin: 0, fontWeight: 700 }, children: "SETTINGS" }), _jsx("h1", { style: { fontFamily: "Cormorant Garamond,serif", fontSize: 24, margin: "6px 0 4px", color: "#1c3147" }, children: "Akun & GDrive" }), _jsx("p", { style: { margin: 0, color: "#6b7280", fontSize: 13 }, children: email ?? "" }), _jsxs("div", { style: { marginTop: 16, background: "#f8f7f4", border: "1px solid #ebe8e3", borderRadius: 12, padding: 14 }, children: [_jsx("p", { style: { margin: 0, fontWeight: 600, color: "#1c3147" }, children: "Google Drive" }), _jsx("p", { style: { margin: "4px 0 0", fontSize: 12, color: "#6b7280" }, children: "Guest upload pakai GDrive global (service refresh_token). Hubungkan opsional untuk Editor admin." }), _jsx("p", { style: { margin: "8px 0 0", fontSize: 13 }, children: connected === null ? "…" : connected ? "Terhubung ✓" : "Belum terhubung" }), _jsxs("div", { style: { display: "flex", gap: 8, marginTop: 10 }, children: [_jsx("button", { onClick: connect, style: { padding: "9px 14px", borderRadius: 999, border: 0, background: "#1c3147", color: "#fff", fontWeight: 600, cursor: "pointer" }, children: "Hubungkan GDrive" }), _jsx("button", { onClick: disconnect, style: { padding: "9px 14px", borderRadius: 999, border: "1px solid #ddd", background: "#fff", cursor: "pointer" }, children: "Putuskan" })] }), msg && _jsx("p", { style: { color: "crimson", fontSize: 13 }, children: msg })] })] }) })] }));
+    async function uploadLogo(e) {
+        const f = e.target.files?.[0];
+        if (!f)
+            return;
+        setUploading(true);
+        setLogoMsg(null);
+        try {
+            const h = await authHeader();
+            const fd = new FormData();
+            fd.set("file", f);
+            const r = await fetch(`${API}/api/site-settings/logo`, { method: "POST", headers: h, body: fd });
+            const j = await r.json().catch(() => ({}));
+            if (!r.ok)
+                throw new Error(j.error ?? "upload fail");
+            setLogoUrl(j.url);
+            setLogoMsg("Logo terupdate — akan dipakai di login, katalog, judul halaman.");
+        }
+        catch (e2) {
+            setLogoMsg(e2.message);
+        }
+        finally {
+            setUploading(false);
+        }
+    }
+    return (_jsxs(AdminLayout, { children: [_jsx("style", { children: `@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Outfit:wght@400;500;600&display=swap');` }), _jsxs("div", { style: { maxWidth: 640 }, children: [_jsx("p", { style: { fontSize: 11, letterSpacing: ".18em", color: "#c4a574", margin: 0, fontWeight: 700 }, children: "PENGATURAN" }), _jsx("h1", { style: { fontFamily: "Cormorant Garamond,serif", fontSize: 26, margin: "6px 0 4px", color: "#1c3147" }, children: "Pengaturan Situs" }), _jsxs("p", { style: { margin: 0, color: "#6b7280", fontSize: 13 }, children: [email ?? "", " \u00B7 Kelola logo & GDrive"] }), _jsxs("div", { style: { marginTop: 16, background: "#fff", border: "1px solid #ebe8e3", borderRadius: 16, padding: 16 }, children: [_jsx("p", { style: { margin: 0, fontWeight: 700, color: "#1c3147" }, children: "Logo Situs" }), _jsx("p", { style: { margin: "4px 0 12px", fontSize: 12, color: "#6b7280" }, children: "Upload logo baru \u2014 dipakai dinamis di halaman login, katalog pelanggan, judul tab, dan header. Format PNG/SVG, max 5MB." }), _jsxs("div", { style: { display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }, children: [_jsx("img", { src: logoUrl, alt: "logo", style: { height: 40, width: "auto", border: "1px solid #ebe8e3", borderRadius: 10, padding: 6, background: "#f8f7f4" } }), _jsxs("label", { style: { padding: "9px 14px", borderRadius: 999, background: "#1c3147", color: "#fff", fontWeight: 600, cursor: uploading ? "not-allowed" : "pointer", opacity: uploading ? 0.6 : 1 }, children: [uploading ? "Mengupload…" : "Upload Logo Baru", _jsx("input", { type: "file", accept: "image/*,.svg", onChange: uploadLogo, disabled: uploading, style: { display: "none" } })] })] }), _jsx("p", { style: { margin: "8px 0 0", fontSize: 11, color: "#9aa", wordBreak: "break-all" }, children: logoUrl }), logoMsg && _jsx("p", { style: { fontSize: 13, color: logoMsg.includes("terupdate") ? "#0a7" : "crimson" }, children: logoMsg })] }), _jsxs("div", { style: { marginTop: 14, background: "#fff", border: "1px solid #ebe8e3", borderRadius: 16, padding: 16 }, children: [_jsx("p", { style: { margin: 0, fontWeight: 700, color: "#1c3147" }, children: "Google Drive" }), _jsx("p", { style: { margin: "4px 0 0", fontSize: 12, color: "#6b7280" }, children: "Guest upload pakai GDrive global (service refresh_token). Hubungkan opsional untuk Editor admin personal." }), _jsx("p", { style: { margin: "8px 0 0", fontSize: 13, color: connected ? "#0a7" : "#6b7280" }, children: connected === null ? "…" : connected ? "Terhubung ✓" : "Belum terhubung" }), _jsxs("div", { style: { display: "flex", gap: 8, marginTop: 10 }, children: [_jsx("button", { onClick: connect, style: { padding: "9px 14px", borderRadius: 999, border: 0, background: "#1c3147", color: "#fff", fontWeight: 600, cursor: "pointer" }, children: "Hubungkan GDrive" }), _jsx("button", { onClick: disconnect, style: { padding: "9px 14px", borderRadius: 999, border: "1px solid #ddd", background: "#fff", cursor: "pointer" }, children: "Putuskan" })] }), msg && _jsx("p", { style: { color: "crimson", fontSize: 13, marginTop: 8 }, children: msg })] })] })] }));
 }

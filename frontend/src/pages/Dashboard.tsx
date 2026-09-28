@@ -1,36 +1,17 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { api } from "../lib/api";
+import { AdminLayout } from "../components/AdminLayout";
 export default function Dashboard() {
-  const nav = useNavigate();
   const [items, setItems] = useState<{ id: string; slug: string; title: string; tier: string; status: string }[]>([]);
-  const [email, setEmail] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
     api("/api/invitations").then(setItems).catch((e) => setErr((e as Error).message));
   }, []);
-  async function logout() { await supabase.auth.signOut(); nav("/login"); }
   return (
-    <div style={{ minHeight: "100svh", background: "#f8f7f4", fontFamily: "Outfit,system-ui,sans-serif" }}>
+    <AdminLayout>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Outfit:wght@400;500;600&display=swap');`}</style>
-      <header style={{ position: "sticky", top: 0, zIndex: 10, background: "rgba(255,255,255,.9)", backdropFilter: "blur(10px)", borderBottom: "1px solid #ebe8e3" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-          <Link to="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-            <img src="/logo.svg" alt="mstory.id" style={{ height: 34, width: "auto" }} />
-            <span style={{ fontSize: 10, background: "#1c3147", color: "#fff", borderRadius: 999, padding: "4px 8px", letterSpacing: ".12em", fontWeight: 600 }}>ADMIN</span>
-          </Link>
-          <nav style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-            <Link to="/" style={{ fontSize: 13, color: "#6b7280", textDecoration: "none" }}>Katalog</Link>
-            <Link to="/admin" style={{ fontSize: 13, color: "#1c3147", textDecoration: "none", border: "1px solid #c4a574", padding: "7px 12px", borderRadius: 999, fontWeight: 600 }}>Pesanan Guest</Link>
-            <Link to="/dashboard/settings" style={{ fontSize: 13, color: "#6b7280", textDecoration: "none" }}>Settings</Link>
-            <span style={{ fontSize: 12, color: "#9aa" }}>{email ?? ""}</span>
-            <button onClick={logout} style={{ fontSize: 12, padding: "7px 10px", borderRadius: 999, border: "1px solid #ddd", background: "#fff", cursor: "pointer" }}>Keluar</button>
-          </nav>
-        </div>
-      </header>
-      <main style={{ maxWidth: 1100, margin: "0 auto", padding: "18px 16px 40px" }}>
         <div style={{ background: "#fff", border: "1px solid #ebe8e3", borderRadius: 16, padding: 16 }}>
           <p style={{ fontSize: 11, letterSpacing: ".18em", color: "#c4a574", margin: 0, fontWeight: 700 }}>DASHBOARD — INVITATIONS (LEGACY)</p>
           <h1 style={{ fontFamily: "Cormorant Garamond,serif", fontSize: 26, margin: "6px 0 4px", color: "#1c3147" }}>Undangan Terbuat</h1>
@@ -61,7 +42,6 @@ export default function Dashboard() {
             </article>
           ))}
         </div>
-      </main>
-    </div>
+    </AdminLayout>
   );
 }
