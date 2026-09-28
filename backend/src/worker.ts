@@ -190,7 +190,7 @@ app.post("/api/invitations/:id/gallery", async (c) => {
     const { data: tok } = await admin.from("gdrive_tokens").select("id").eq("user_id", u.id).maybeSingle();
     if (tok) {
       const drive = await driveFor(c.env, u.id);
-      const root = await ensureFolder(drive, "Invora");
+      const root = await ensureFolder(drive, "mstory.id");
       const folder = await ensureFolder(drive, inv.slug, root);
       const up = await uploadBuffer(drive, { buffer: buf, filename: file.name, mimeType: file.type || "image/jpeg" }, folder);
       driveId = up.id ?? null; url = driveId ? `https://drive.google.com/uc?export=view&id=${driveId}` : url;

@@ -1,4 +1,4 @@
-# Invora — Undangan Digital Hybrid (full Cloudflare)
+# mstory.id — Undangan Digital Hybrid (full Cloudflare)
 
 **Stack gratis:** Cloudflare Workers (Hono API) + Cloudflare Pages (Vite React) + Supabase PostgreSQL + Google Drive OAuth. Tanpa Render/Vercel.
 

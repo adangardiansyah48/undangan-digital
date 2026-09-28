@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 export default function Landing() {
   return (
     <div style={{ fontFamily: "Outfit,system-ui,sans-serif", color: "#14141a", background: "#fff", minHeight: "100svh" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Great+Vibes&family=Outfit:wght@400;600&display=swap');`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Outfit:wght@400;600&display=swap');`}</style>
       <header style={{ maxWidth: 1200, margin: "0 auto", padding: "14px 20px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #eee" }}>
         <b style={{ fontFamily: "Outfit,sans-serif", fontSize: 20, letterSpacing: "-.02em" }}>mstory<span style={{ color: "#888", fontWeight: 400 }}>.id</span> <span style={{ fontSize: 10, background: "#111", color: "#fff", borderRadius: 999, padding: "3px 8px", verticalAlign: "middle", letterSpacing: ".12em" }}>ELEGANT</span></b>
         <nav style={{ display: "flex", gap: 18, fontSize: 14, alignItems: "center" }}>
@@ -14,9 +14,7 @@ export default function Landing() {
       <section style={{ maxWidth: 1200, margin: "0 auto", padding: "40px 20px 28px", display: "grid", gap: 28, gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", alignItems: "center" }}>
         <div>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6, border: "1px solid #e8e8e8", background: "#f8f8f8", borderRadius: 999, padding: "6px 12px", fontSize: 12, fontWeight: 600 }}><span style={{ width: 8, height: 8, borderRadius: 999, background: "#10b981", display: "inline-block" }} />Undangan digital · Edit sendiri atau dibantu tim</span>
-          <h1 style={{ fontFamily: "Cormorant Garamond,serif", fontSize: "clamp(36px,6vw,54px)", lineHeight: .95, margin: "16px 0 12px" }}>
-            Undangan <span style={{ fontStyle: "italic", fontWeight: 400 }}>cantik</span>,<br />jadi dalam menit.
-          </h1>
+          <h1 style={{ fontFamily: "Cormorant Garamond,serif", fontSize: "clamp(36px,6vw,54px)", lineHeight: .95, margin: "16px 0 12px" }}>Undangan <span style={{ fontStyle: "italic", fontWeight: 400 }}>cantik</span>,<br />jadi dalam menit.</h1>
           <p style={{ color: "#6b7280", lineHeight: 1.6, maxWidth: 520, margin: 0, fontSize: 15 }}>Pilih desain fresh, isi data mempelai, upload foto, sebar satu link untuk semua tamu. Atau serahkan ke tim — kamu tinggal approve.</p>
           <div style={{ display: "flex", gap: 10, marginTop: 18, flexWrap: "wrap" }}>
             <Link to="/katalog" style={cta}>Lihat Katalog Desain</Link>

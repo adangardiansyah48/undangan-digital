@@ -119,7 +119,7 @@ r.post("/:id/gallery", upload.single("file"), async (req, res, next) => {
       const { data: tok } = await supabaseAdmin().from("gdrive_tokens").select("id").eq("user_id", user!.id).maybeSingle();
       if (tok) {
         const { ensureFolder, uploadBuffer, driveUrl } = await import("../lib/gdrive.js");
-        const root = await ensureFolder(user!.id, "Invora");
+        const root = await ensureFolder(user!.id, "mstory.id");
         const folder = await ensureFolder(user!.id, inv.slug, root);
         const up = await uploadBuffer(user!.id, { buffer: file.buffer, filename: file.originalname, mimeType: file.mimetype || "image/jpeg" }, folder);
         driveId = up.id ?? null; url = driveId ? driveUrl(driveId) : url;
