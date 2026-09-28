@@ -59,10 +59,18 @@ export type BankAccount = {
   bank: string;
   number: string;
   name: string;
+  qrUrl?: string;
+};
+
+export type StoryItem = {
+  date: string;
+  title: string;
+  desc: string;
 };
 
 export type InvitationData = {
   coverTitle?: string;
+  coverPhoto?: string;
   quote?: string;
   quoteSource?: string;
   musicUrl?: string;
@@ -72,7 +80,9 @@ export type InvitationData = {
   };
   events?: EventItem[];
   story?: string;
+  storyTimeline?: StoryItem[];
   giftNote?: string;
+  giftMessage?: string;
   banks?: BankAccount[];
   giftAddress?: {
     name: string;
@@ -81,6 +91,9 @@ export type InvitationData = {
   };
   liveStreamUrl?: string;
   healthProtocols?: boolean;
+  closingTitle?: string;
+  closingMessage?: string;
+  closingPhoto?: string;
 };
 
 export type Invitation = {

@@ -92,12 +92,14 @@ export function InvitationEditor({
       {msg && <p className="text-sm text-muted-foreground">{msg}</p>}
 
       <Tabs defaultValue="mempelai">
-        <TabsList className="flex w-full flex-wrap">
+        <TabsList className="flex w-full flex-wrap gap-1">
           <TabsTrigger value="mempelai">Mempelai</TabsTrigger>
           <TabsTrigger value="acara">Acara</TabsTrigger>
           <TabsTrigger value="galeri">Galeri</TabsTrigger>
           <TabsTrigger value="tamu">Tamu</TabsTrigger>
           <TabsTrigger value="amplop">Amplop</TabsTrigger>
+          <TabsTrigger value="musik">Musik</TabsTrigger>
+          <TabsTrigger value="penutup">Penutup</TabsTrigger>
           <TabsTrigger value="pengaturan">Pengaturan</TabsTrigger>
         </TabsList>
 
@@ -196,18 +198,37 @@ export function InvitationEditor({
                 </div>
               </div>
               <div className="md:col-span-2 space-y-1.5">
+                <Label>Foto mempelai (URL Drive / https)</Label>
+                <div className="grid gap-2 md:grid-cols-2">
+                  <Input value={data.couple?.groom?.photo ?? ""} onChange={(e) => patchData({ couple: { bride: data.couple?.bride ?? { name: "", fullName: "", parents: "" }, groom: { ...(data.couple?.groom ?? { name: "", fullName: "", parents: "" }), photo: e.target.value } } })} placeholder="Foto pria https://…" />
+                  <Input value={data.couple?.bride?.photo ?? ""} onChange={(e) => patchData({ couple: { groom: data.couple?.groom ?? { name: "", fullName: "", parents: "" }, bride: { ...(data.couple?.bride ?? { name: "", fullName: "", parents: "" }), photo: e.target.value } } })} placeholder="Foto wanita https://…" />
+                </div>
+                <div className="grid gap-2 md:grid-cols-2">
+                  <Input value={data.couple?.groom?.instagram ?? ""} onChange={(e) => patchData({ couple: { bride: data.couple?.bride ?? { name: "", fullName: "", parents: "" }, groom: { ...(data.couple?.groom ?? { name: "", fullName: "", parents: "" }), instagram: e.target.value } } })} placeholder="IG pria @username" />
+                  <Input value={data.couple?.bride?.instagram ?? ""} onChange={(e) => patchData({ couple: { groom: data.couple?.groom ?? { name: "", fullName: "", parents: "" }, bride: { ...(data.couple?.bride ?? { name: "", fullName: "", parents: "" }), instagram: e.target.value } } })} placeholder="IG wanita @username" />
+                </div>
+                <Input value={data.coverPhoto ?? ""} onChange={(e) => patchData({ coverPhoto: e.target.value })} placeholder="Foto sampul cover (opsional) https://…" />
+              </div>
+              <div className="md:col-span-2 space-y-1.5">
                 <Label>Quotes / kutipan nikah</Label>
-                <Textarea
-                  rows={3}
-                  value={data.quote ?? ""}
-                  onChange={(e) => patchData({ quote: e.target.value })}
-                  placeholder="Dan di antara tanda-tanda…"
-                />
-                <Input
-                  value={data.quoteSource ?? ""}
-                  onChange={(e) => patchData({ quoteSource: e.target.value })}
-                  placeholder="Q.S. Ar-Rum: 21"
-                />
+                <Textarea rows={3} value={data.quote ?? ""} onChange={(e) => patchData({ quote: e.target.value })} placeholder="Dan di antara tanda-tanda…" />
+                <Input value={data.quoteSource ?? ""} onChange={(e) => patchData({ quoteSource: e.target.value })} placeholder="Q.S. Ar-Rum: 21" />
+              </div>
+              <div className="md:col-span-2 space-y-1.5">
+                <Label>Cerita / Love Story (paragraf)</Label>
+                <Textarea rows={3} value={data.story ?? ""} onChange={(e) => patchData({ story: e.target.value })} placeholder="Awal bertemu di kampus…" />
+                <p className="text-xs text-muted-foreground">Atau pakai timeline di bawah (opsional).</p>
+                {(data.storyTimeline ?? []).map((s, i) => (
+                  <div key={i} className="grid gap-2 md:grid-cols-3 rounded-xl border p-2">
+                    <Input value={s.date} onChange={(e) => { const n = [...(data.storyTimeline ?? [])]; n[i] = { ...s, date: e.target.value }; patchData({ storyTimeline: n }); }} placeholder="2022-12-06" />
+                    <Input value={s.title} onChange={(e) => { const n = [...(data.storyTimeline ?? [])]; n[i] = { ...s, title: e.target.value }; patchData({ storyTimeline: n }); }} placeholder="Awal bertemu" />
+                    <Input value={s.desc} onChange={(e) => { const n = [...(data.storyTimeline ?? [])]; n[i] = { ...s, desc: e.target.value }; patchData({ storyTimeline: n }); }} placeholder="Deskripsi singkat" />
+                  </div>
+                ))}
+                <div className="flex gap-2">
+                  <Button type="button" size="sm" variant="outline" onClick={() => patchData({ storyTimeline: [...(data.storyTimeline ?? []), { date: "", title: "", desc: "" }] })}>+ Timeline</Button>
+                  {(data.storyTimeline?.length ?? 0) > 0 && <Button type="button" size="sm" variant="ghost" onClick={() => patchData({ storyTimeline: data.storyTimeline?.slice(0, -1) })}>Hapus terakhir</Button>}
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -297,22 +318,7 @@ export function InvitationEditor({
               >
                 + Sesi
               </Button>
-              <div className="space-y-1.5 pt-3">
-                <Label>Musik Latar URL (mp3)</Label>
-                <Input
-                  value={data.musicUrl ?? ""}
-                  onChange={(e) => patchData({ musicUrl: e.target.value })}
-                  placeholder="https://…/bgm.mp3"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label>Live stream URL</Label>
-                <Input
-                  value={data.liveStreamUrl ?? ""}
-                  onChange={(e) => patchData({ liveStreamUrl: e.target.value })}
-                  placeholder="https://youtube.com/…"
-                />
-              </div>
+              <p className="text-xs text-muted-foreground">Musik &amp; live stream ada di tab Musik.</p>
             </CardContent>
           </Card>
         </TabsContent>
@@ -331,63 +337,51 @@ export function InvitationEditor({
               <CardTitle className="text-base">Amplop digital & hadiah</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
+              <div className="space-y-1.5">
+                <Label>Pesan amplop</Label>
+                <Textarea rows={2} value={data.giftMessage ?? ""} onChange={(e) => patchData({ giftMessage: e.target.value })} placeholder="Doa restu Anda sangat berarti…" />
+              </div>
               {(data.banks ?? [{ bank: "", number: "", name: "" }]).map((b, i) => (
-                <div key={i} className="grid gap-2 md:grid-cols-3">
-                  <Input
-                    value={b.bank}
-                    onChange={(e) => {
-                      const next = [...(data.banks ?? [])];
-                      next[i] = { ...b, bank: e.target.value };
-                      patchData({ banks: next });
-                    }}
-                    placeholder="BCA / BNI / OVO"
-                  />
-                  <Input
-                    value={b.number}
-                    onChange={(e) => {
-                      const next = [...(data.banks ?? [])];
-                      next[i] = { ...b, number: e.target.value };
-                      patchData({ banks: next });
-                    }}
-                    placeholder="Nomor rekening"
-                  />
-                  <Input
-                    value={b.name}
-                    onChange={(e) => {
-                      const next = [...(data.banks ?? [])];
-                      next[i] = { ...b, name: e.target.value };
-                      patchData({ banks: next });
-                    }}
-                    placeholder="Atas nama"
-                  />
+                <div key={i} className="grid gap-2 md:grid-cols-4">
+                  <Input value={b.bank} onChange={(e) => { const n = [...(data.banks ?? [])]; n[i] = { ...b, bank: e.target.value }; patchData({ banks: n }); }} placeholder="BCA / OVO" />
+                  <Input value={b.number} onChange={(e) => { const n = [...(data.banks ?? [])]; n[i] = { ...b, number: e.target.value }; patchData({ banks: n }); }} placeholder="Nomor" />
+                  <Input value={b.name} onChange={(e) => { const n = [...(data.banks ?? [])]; n[i] = { ...b, name: e.target.value }; patchData({ banks: n }); }} placeholder="a.n." />
+                  <Input value={b.qrUrl ?? ""} onChange={(e) => { const n = [...(data.banks ?? [])]; n[i] = { ...b, qrUrl: e.target.value }; patchData({ banks: n }); }} placeholder="QR URL (opsional)" />
                 </div>
               ))}
               <div className="flex gap-2">
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  onClick={() => patchData({ banks: [...(data.banks ?? []), { bank: "", number: "", name: "" }] })}
-                >
-                  + Rekening
-                </Button>
-                <Button type="button" size="sm" variant="ghost" onClick={save}>
-                  Simpan
-                </Button>
+                <Button type="button" size="sm" variant="outline" onClick={() => patchData({ banks: [...(data.banks ?? []), { bank: "", number: "", name: "" }] })}>+ Rekening</Button>
+                <Button type="button" size="sm" variant="ghost" onClick={save}>Simpan</Button>
               </div>
               <div className="space-y-1.5 border-t border-border pt-4">
-                <Label>Kirim hadiah fisik (optional)</Label>
-                <Input
-                  value={data.giftAddress?.name ?? ""}
-                  onChange={(e) => patchData({ giftAddress: { ...(data.giftAddress ?? { name: "", phone: "", address: "" }), name: e.target.value } })}
-                  placeholder="Nama penerima"
-                />
-                <Input
-                  value={data.giftAddress?.address ?? ""}
-                  onChange={(e) => patchData({ giftAddress: { ...(data.giftAddress ?? { name: "", phone: "", address: "" }), address: e.target.value } })}
-                  placeholder="Alamat lengkap"
-                />
+                <Label>Kirim hadiah fisik (opsional)</Label>
+                <Input value={data.giftAddress?.name ?? ""} onChange={(e) => patchData({ giftAddress: { ...(data.giftAddress ?? { name: "", phone: "", address: "" }), name: e.target.value } })} placeholder="Nama penerima" />
+                <Input value={data.giftAddress?.phone ?? ""} onChange={(e) => patchData({ giftAddress: { ...(data.giftAddress ?? { name: "", phone: "", address: "" }), phone: e.target.value } })} placeholder="No HP penerima" />
+                <Input value={data.giftAddress?.address ?? ""} onChange={(e) => patchData({ giftAddress: { ...(data.giftAddress ?? { name: "", phone: "", address: "" }), address: e.target.value } })} placeholder="Alamat lengkap" />
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="musik" className="mt-4 space-y-4">
+          <Card>
+            <CardHeader><CardTitle className="text-base">Musik latar</CardTitle></CardHeader>
+            <CardContent className="space-y-3">
+              <Input value={data.musicUrl ?? ""} onChange={(e) => patchData({ musicUrl: e.target.value })} placeholder="https://…/bgm.mp3 (mp3)" />
+              <p className="text-xs text-muted-foreground">Autoplay setelah tamu klik Buka Undangan. Kosongkan untuk tanpa musik.</p>
+              <Input value={data.liveStreamUrl ?? ""} onChange={(e) => patchData({ liveStreamUrl: e.target.value })} placeholder="Live stream URL (YouTube/Zoom) opsional" />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="penutup" className="mt-4 space-y-4">
+          <Card>
+            <CardHeader><CardTitle className="text-base">Penutup — terima kasih & doa</CardTitle></CardHeader>
+            <CardContent className="space-y-3">
+              <Input value={data.coverTitle ?? ""} onChange={(e) => patchData({ coverTitle: e.target.value })} placeholder="Judul cover: The Wedding of…" />
+              <Input value={data.closingTitle ?? ""} onChange={(e) => patchData({ closingTitle: e.target.value })} placeholder="Judul penutup (Terima kasih — Andi & Sari)" />
+              <Textarea rows={4} value={data.closingMessage ?? ""} onChange={(e) => patchData({ closingMessage: e.target.value })} placeholder="Ucapan terima kasih & doa untuk tamu…" />
+              <Input value={data.closingPhoto ?? ""} onChange={(e) => patchData({ closingPhoto: e.target.value })} placeholder="Foto penutup https://… (opsional)" />
             </CardContent>
           </Card>
         </TabsContent>
