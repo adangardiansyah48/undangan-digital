@@ -2,22 +2,19 @@ import { FEATURES } from "@/lib/constants";
 
 export function Features() {
   return (
-    <section id="fitur" className="mx-auto max-w-6xl px-4 py-20">
-      <p className="text-xs tracking-[0.2em] uppercase text-muted-foreground">Fitur</p>
-      <h2 className="mt-2 text-3xl font-semibold tracking-tight">
-        Semua yang kamu butuhkan
-      </h2>
-      <p className="mt-2 max-w-xl text-muted-foreground">
-        Satu halaman undangan, tampil baik di semua perangkat.
-      </p>
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <section id="fitur" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold tracking-[0.18em] text-muted-foreground">FITUR LENGKAP</p>
+          <h2 className="mt-2 font-serif text-3xl leading-tight sm:text-4xl">Semua yang kamu butuh,<br />dalam satu link.</h2>
+        </div>
+        <p className="max-w-md text-sm text-muted-foreground">Tamu buka di HP langsung cantik. Musik auto, maps klik, amplop salin — tidak perlu install.</p>
+      </div>
+      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {FEATURES.map((f) => (
-          <div
-            key={f.title}
-            className="rounded-2xl border border-border bg-card p-5 transition-colors hover:bg-muted/40"
-          >
-            <h3 className="font-medium">{f.title}</h3>
-            <p className="mt-1 text-sm text-muted-foreground">{f.desc}</p>
+          <div key={f.title} className="rounded-2xl border bg-white p-5">
+            <p className="text-[11px] font-semibold tracking-widest text-muted-foreground">{f.title.toUpperCase()}</p>
+            <p className="mt-2 text-sm font-medium leading-snug">{f.desc}</p>
           </div>
         ))}
       </div>
