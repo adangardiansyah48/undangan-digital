@@ -10,6 +10,8 @@ import Editor from "./pages/Editor";
 import PublicInvitation from "./pages/PublicInvitation";
 import Settings from "./pages/Settings";
 import ContohDesain from "./pages/ContohDesain";
+import Order from "./pages/Order";
+import Admin from "./pages/Admin";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -17,6 +19,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/katalog" element={<Katalog />} />
+        <Route path="/pesan" element={<Order />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Login mode="register" />} />
         <Route path="/dashboard" element={<Dashboard />} />

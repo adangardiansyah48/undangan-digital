@@ -11,6 +11,7 @@ type Env = {
   GOOGLE_CLIENT_SECRET: string;
   GOOGLE_REDIRECT_URI: string;
   GOOGLE_DRIVE_FOLDER_ID: string;
+  GOOGLE_OAUTH_REFRESH_TOKEN: string;
   FRONTEND_URL: string;
 };
 
@@ -58,6 +59,104 @@ app.get("/api/templates", async (c) => {
   if (cat !== "all") q = q.eq("category", cat);
   const { data, error } = await q;
   if (error) return c.json({ error: error.message }, 500);
+  return c.json(data);
+});
+
+app.post("/api/guest-orders", async (c) => {
+  const ct = c.req.header("content-type") ?? "";
+  let body: Record<string, unknown> = {};
+  const admin = sbAdmin(c.env);
+  if (ct.includes("multipart/form-data") || ct.includes("application/x-www-form-urlencoded")) {
+    const form = await c.req.formData().catch(() => null);
+    if (!form) return c.json({ error: "invalid form" }, 400);
+    for (const [k, v] of form.entries()) if (typeof v === "string") body[k] = v;
+    const files: { kind: string; file: File }[] = [];
+    for (const [k, v] of form.entries()) if (v instanceof File && v.size > 0) {
+      const kind = k.startsWith("album") ? "album" : k.startsWith("bride") ? "bride" : k.startsWith("groom") ? "groom" : k.startsWith("video") ? "video" : "other";
+      files.push({ kind, file: v as File });
+    }
+    const template_slug = String(body.template_slug ?? "").trim();
+    if (!template_slug) return c.json({ error: "template_slug required" }, 400);
+    const contact_name = String(body.contact_name ?? body.wa_name ?? "").trim();
+    const contact_wa = String(body.contact_wa ?? body.wa ?? "").trim();
+    if (!contact_name || !contact_wa) return c.json({ error: "contact_name & contact_wa required" }, 400);
+    const { data: tmpl } = await admin.from("templates").select("slug").eq("slug", template_slug).maybeSingle();
+    if (!tmpl) return c.json({ error: "template not found" }, 404);
+    const dataJson: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(body)) if (!["template_slug","contact_name","contact_wa","contact_email","first_name_order","religion"].includes(k)) dataJson[k] = v;
+    try { if (body.data_json && typeof body.data_json === "string") Object.assign(dataJson, JSON.parse(body.data_json as string)); } catch {}
+    const { data: order, error } = await admin.from("guest_orders").insert({
+      template_slug, contact_name, contact_wa, contact_email: (body.contact_email as string) ?? null,
+      first_name_order: (body.first_name_order as string) ?? null, religion: (body.religion as string) ?? null, data: dataJson,
+    }).select("id").single();
+    if (error) return c.json({ error: error.message }, 400);
+    if (files.length && c.env.GOOGLE_OAUTH_REFRESH_TOKEN) {
+      try {
+        const root = c.env.GOOGLE_DRIVE_FOLDER_ID || undefined;
+        const folder = await driveGlobalEnsureFolder(c.env, `order-${order.id.slice(0,8)}-${template_slug}`, root);
+        for (const { kind, file } of files) {
+          const buf = Buffer.from(await file.arrayBuffer());
+          const up = await driveGlobalUpload(c.env, { buffer: buf, filename: file.name, mimeType: file.type || "image/jpeg" }, folder);
+          const url = up.id ? `https://drive.google.com/uc?export=view&id=${up.id}` : `memory:${file.name}`;
+          await admin.from("guest_order_files").insert({ order_id: order.id, kind, url, drive_file_id: up.id ?? null });
+        }
+      } catch {}
+    } else {
+      for (const { kind, file } of files) await admin.from("guest_order_files").insert({ order_id: order.id, kind, url: `memory:${file.name}` });
+    }
+    return c.json({ ok: true, id: order.id });
+  }
+  body = await c.req.json().catch(() => ({})) as Record<string, unknown>;
+  const template_slug = String((body.template_slug as string) ?? "").trim();
+  if (!template_slug) return c.json({ error: "template_slug required" }, 400);
+  const contact_name = String((body.contact_name as string) ?? "").trim();
+  const contact_wa = String((body.contact_wa as string) ?? "").trim();
+  if (!contact_name || !contact_wa) return c.json({ error: "contact_name & contact_wa required" }, 400);
+  const { data: tmpl2 } = await admin.from("templates").select("slug").eq("slug", template_slug).maybeSingle();
+  if (!tmpl2) return c.json({ error: "template not found" }, 404);
+  const dataJson2: Record<string, unknown> = (body.data as Record<string, unknown>) ?? {};
+  for (const [k, v] of Object.entries(body)) if (!["template_slug","contact_name","contact_wa","contact_email","first_name_order","religion","data"].includes(k)) (dataJson2 as Record<string, unknown>)[k] = v;
+  const { data: order2, error: err2 } = await admin.from("guest_orders").insert({
+    template_slug, contact_name, contact_wa, contact_email: (body.contact_email as string) ?? null,
+    first_name_order: (body.first_name_order as string) ?? null, religion: (body.religion as string) ?? null, data: dataJson2,
+  }).select("id").single();
+  if (err2) return c.json({ error: err2.message }, 400);
+  return c.json({ ok: true, id: order2.id });
+});
+app.get("/api/guest-orders", async (c) => {
+  const u = await getUser(c as never);
+  if (!u) return c.json({ error: "auth required" }, 401);
+  const { data: prof } = await sbAdmin(c.env).from("profiles").select("role").eq("id", u.id).single();
+  if (!prof || !["admin","superadmin"].includes(prof.role)) return c.json({ error: "forbidden" }, 403);
+  const { data, error } = await sbAdmin(c.env).from("guest_orders").select("*").order("created_at", { ascending: false }).limit(200);
+  if (error) return c.json({ error: error.message }, 500);
+  return c.json(data);
+});
+app.get("/api/guest-orders/:id", async (c) => {
+  const u = await getUser(c as never);
+  if (!u) return c.json({ error: "auth required" }, 401);
+  const { data: prof } = await sbAdmin(c.env).from("profiles").select("role").eq("id", u.id).single();
+  if (!prof || !["admin","superadmin"].includes(prof.role)) return c.json({ error: "forbidden" }, 403);
+  const id = c.req.param("id");
+  const admin = sbAdmin(c.env);
+  const { data, error } = await admin.from("guest_orders").select("*").eq("id", id).single();
+  if (error || !data) return c.json({ error: "not found" }, 404);
+  const { data: files } = await admin.from("guest_order_files").select("*").eq("order_id", id);
+  return c.json({ order: data, files: files ?? [] });
+});
+app.patch("/api/guest-orders/:id", async (c) => {
+  const u = await getUser(c as never);
+  if (!u) return c.json({ error: "auth required" }, 401);
+  const { data: prof } = await sbAdmin(c.env).from("profiles").select("role").eq("id", u.id).single();
+  if (!prof || !["admin","superadmin"].includes(prof.role)) return c.json({ error: "forbidden" }, 403);
+  const id = c.req.param("id");
+  const body = await c.req.json().catch(() => ({})) as Record<string, unknown>;
+  const patch: Record<string, unknown> = {};
+  if (body.status !== undefined) patch.status = body.status;
+  if (body.payment_status !== undefined) patch.payment_status = body.payment_status;
+  if (body.notes !== undefined) patch.notes = body.notes;
+  const { data, error } = await sbAdmin(c.env).from("guest_orders").update(patch).eq("id", id).select("*").single();
+  if (error) return c.json({ error: error.message }, 400);
   return c.json(data);
 });
 
@@ -211,6 +310,27 @@ app.post("/api/invitations/:id/wishes", async (c) => {
   return c.json(data);
 });
 
+async function driveGlobal(env: Env) {
+  if (!env.GOOGLE_OAUTH_REFRESH_TOKEN || !env.GOOGLE_CLIENT_ID) throw new Error("gdrive global not configured");
+  const o = new google.auth.OAuth2(env.GOOGLE_CLIENT_ID, env.GOOGLE_CLIENT_SECRET, env.GOOGLE_REDIRECT_URI);
+  o.setCredentials({ refresh_token: env.GOOGLE_OAUTH_REFRESH_TOKEN });
+  return google.drive({ version: "v3", auth: o });
+}
+async function driveGlobalUpload(env: Env, file: { buffer: Buffer; filename: string; mimeType: string }, folderId: string) {
+  const drive = await driveGlobal(env);
+  const { Readable } = await import("stream");
+  const res = await drive.files.create({ requestBody: { name: file.filename, parents: [folderId] }, media: { mimeType: file.mimeType, body: Readable.from(file.buffer) }, fields: "id" });
+  if (res.data.id) await drive.permissions.create({ fileId: res.data.id, requestBody: { role: "reader", type: "anyone" } }).catch(() => {});
+  return res.data;
+}
+async function driveGlobalEnsureFolder(env: Env, name: string, parentId?: string) {
+  const drive = await driveGlobal(env);
+  const q = [`name = '${name.replace(/'/g, "\\'")}'`, "mimeType = 'application/vnd.google-apps.folder'", "trashed = false", parentId ? `'${parentId}' in parents` : undefined].filter(Boolean).join(" and ");
+  const found = await drive.files.list({ q, fields: "files(id,name)", pageSize: 1 });
+  if (found.data.files?.[0]?.id) return found.data.files[0].id!;
+  const created = await drive.files.create({ requestBody: { name, mimeType: "application/vnd.google-apps.folder", parents: parentId ? [parentId] : undefined }, fields: "id" });
+  return created.data.id!;
+}
 function gdriveOAuth(env: Env) {
   return new google.auth.OAuth2(env.GOOGLE_CLIENT_ID, env.GOOGLE_CLIENT_SECRET, env.GOOGLE_REDIRECT_URI);
 }
