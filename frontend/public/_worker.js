@@ -20,7 +20,6 @@ export default {
     const asset = await env.ASSETS.fetch(request);
     if (asset.status !== 404) return asset;
 
-    const index = new Request(new URL("/index.html", url.origin), request);
-    return env.ASSETS.fetch(index);
+    return env.ASSETS.fetch(new URL("/", url.origin));
   },
 };
