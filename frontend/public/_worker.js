@@ -1,6 +1,7 @@
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
     if (url.pathname.startsWith("/api/")) {
       const target = new URL(request.url);
       target.hostname = "mstory.adangardiansyah48.workers.dev";
@@ -15,6 +16,11 @@ export default {
       out.delete("content-length");
       return new Response(res.body, { status: res.status, statusText: res.statusText, headers: out });
     }
-    return env.ASSETS.fetch(request);
+
+    const asset = await env.ASSETS.fetch(request);
+    if (asset.status !== 404) return asset;
+
+    const index = new Request(new URL("/index.html", url.origin), request);
+    return env.ASSETS.fetch(index);
   },
 };
